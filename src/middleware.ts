@@ -6,6 +6,30 @@ export async function middleware(request: NextRequest) {
   const patheName = request.nextUrl.pathname;
   const cookie = request.cookies.get('token');
 
+  if (patheName === '/') {
+    return NextResponse.redirect(new URL('/auth/signin', request.url))
+  }
+
+  if (patheName.startsWith('/work') && !cookie?.value) {
+    const searchParams = new URLSearchParams(request.nextUrl.search);
+    const token = searchParams.get('token') ?? '';
+    const userPayload = await verifyToken(token);
+    
+    if (!userPayload) { 
+      return NextResponse.redirect(new URL('/auth/signin', request.url))
+    } else {
+      const response = NextResponse.next();
+      response.cookies.set('token', token, {
+        httpOnly: true
+      })
+      response.cookies.set('user', JSON.stringify(userPayload), {
+        httpOnly:true
+      })
+
+      return response
+    }
+  }
+
   if (!cookie?.value) {
     return NextResponse.redirect(new URL('/auth/signin', request.url));
   } else {
@@ -13,28 +37,12 @@ export async function middleware(request: NextRequest) {
     if (validToken) return NextResponse.next();
   }
 
-  if (patheName.startsWith('/work')) {
-    const searchParams = new URLSearchParams(request.nextUrl.search);
-    const token = searchParams.get('token') ?? '';
-    const validToken = await verifyToken(token);
-    
-    if (!validToken) { 
-      return NextResponse.redirect(new URL('/auth/signin', request.url))
-    } else {
-      const response = NextResponse.next();
-      response.cookies.set('token', token, {
-        httpOnly: true
-      })
-
-      return response
-    }
-  }
 
   return NextResponse.next()
 }
  
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|auth).*)',
+    '/((?!api|_next|static|public|favicon.ico|auth|logo.svg).*)',
   ],
 }
