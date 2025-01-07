@@ -6,11 +6,14 @@ export async function checkHasEvaluations(): Promise<ResponseApp<boolean, string
   const token = await retrieveAccessToken();
 
   try {
-    const response = await fetch(`${process.env.API_BASE_URL}/has-evaluations`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/evaluations/has-evaluations`, {
       method: "GET",
       headers: { 
         "Authorization": `Bearer ${token}`
       },
+      next: {
+        revalidate: 60
+      }
     });
 
     const response_data = (await response.json());

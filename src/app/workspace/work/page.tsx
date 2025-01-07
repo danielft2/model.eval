@@ -1,14 +1,12 @@
 import { retrieveCurrentUser } from "@/actions/retrieve-current-user";
 import { Divider } from "@/components/ui/divider";
-import { checkHasEvaluationsAction } from "@/features/workspace/actions/check-has-evaluations";
-import { EvaluationsTabs } from "@/features/workspace/components/evaluations-tabs";
-import { FirstEvaluation } from "@/features/workspace/components/first-evaluation";
-import { UpdateUsernameModal } from "@/features/workspace/components/update-username-modal";
+import { checkHasEvaluationsAction } from "@/features/work/actions/check-has-evaluations";
+import { EvaluationsTabs } from "@/features/work/components/evaluations-tabs";
+import { FirstEvaluation } from "@/features/work/components/first-evaluation";
+import { UpdateUsernameModal } from "@/features/work/components/update-username-modal";
 
 export default async function WorkPage() {
   const hasEvaluations = await checkHasEvaluationsAction();
-  console.log(hasEvaluations);
-
   const user = await retrieveCurrentUser();
   const userName = user?.name;
 

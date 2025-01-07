@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
 import * as Tabs from "@radix-ui/react-tabs";
 import { CircleUserRound, ListVideo, Wrench } from "lucide-react";
+import { Suspense } from "react";
+
+import { AutomaticEvaluationList } from "./automatic-evaluation/automatic-evaluation-list";
 
 export function EvaluationsTabs() {
   return (
@@ -35,7 +38,9 @@ export function EvaluationsTabs() {
         className="grow rounded-b-md bg-white py-5 outline-none"
         value="automatica"
       >
-        <p>Avaliações automáticas</p>
+        <Suspense fallback={<p>Carregando...</p>}>
+          <AutomaticEvaluationList />
+        </Suspense>
       </Tabs.Content>
       <Tabs.Content
         className="grow rounded-b-md bg-white py-5 outline-none"

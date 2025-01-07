@@ -10,12 +10,13 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/auth/signin', request.url))
   }
 
-  if (patheName.startsWith('/work') && !cookie?.value) {
+  if (patheName.startsWith('/work')) {
     const searchParams = new URLSearchParams(request.nextUrl.search);
     const token = searchParams.get('token') ?? '';
     const userPayload = await verifyToken(token);
     
     if (!userPayload) { 
+      if (cookie?.value) return NextResponse.next();
       return NextResponse.redirect(new URL('/auth/signin', request.url))
     } else {
       const response = NextResponse.next();
