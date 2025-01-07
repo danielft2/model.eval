@@ -13,7 +13,7 @@ export default function SignInPage() {
               É bom ter você aqui.
             </h1>
             <p className="font-body font-medium text-slate-600 max-w-[50ch] text-center">
-              Descubra como o seu modelo Flan/T5 performa na criação de questões
+              Descubra como o seu modelo T5 performa na criação de questões
               educacionais de forma fácil e rápida.
             </p>
           </div>

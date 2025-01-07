@@ -1,5 +1,5 @@
 import { retrieveCurrentUser } from "@/actions/retrieve-current-user";
-import { Navigation } from "@/features/workspace/components/navigation";
+import { Navigation } from "@/features/work/components/navigation";
 import Image from "next/image";
 
 export default async function WorkspaceLayout({

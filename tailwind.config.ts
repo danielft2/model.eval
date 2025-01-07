@@ -12,8 +12,9 @@ export default {
   theme: {
   	extend: {
 			container: {
+				padding: "2rem",
         screens: {
-					xl: '1212px'
+					xl: '1312px'
 				},
 			},
   		colors: {
