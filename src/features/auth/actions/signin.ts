@@ -1,8 +1,9 @@
 "use server";
 
+import { fetchClient } from "@/api/fetch-client";
 import { ResponseApp } from "@/api/response";
-import { signin } from "@/features/auth/api/signin";
 import { SigninData, SigninError } from "@/features/auth/types/signin";
+import { ValidationErrors } from "@/infra/http/response";
 import { z } from "zod";
 
 const schema = z.object({
@@ -17,27 +18,32 @@ export async function signinAction(
   const validatedFields = schema.safeParse({ email });
 
   if (!validatedFields.success) {
+    const errors: ValidationErrors = {};
+    const fieldErrors = validatedFields.error.errors;
+    for (const error of fieldErrors) {
+      errors[error.path[0]] = { message: error.message };
+    }
+
     return {
+      data: null,
       error: {
         message: "",
-        validations: validatedFields.error.flatten().fieldErrors,
+        validations: errors,
       },
     };
   }
 
-  const response = await signin(email);
-
-  if (response.data) {
-    return {
-      data: {
-        message: response.data,
-      },
-    };
-  }
+  const response = await fetchClient.POST<{ data: string, message: string }>("/auth/signin", {
+    body: JSON.stringify({ email }),
+  });
 
   return {
+    data: {
+      message: response.message || "",
+    },
     error: {
-      message: response.error,
+      message: response.error?.message || "",
+      validations: response.error?.validations
     },
   };
 }
