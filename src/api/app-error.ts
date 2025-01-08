@@ -1,13 +1,27 @@
-export class AppError extends Error {
-  public statusCode: number
+import { ResponseHttp, ValidationErrors } from "@/infra/http/response";
 
-  constructor(message: string, statusCode: number = 500) {
+export class AppError extends Error {
+  constructor(
+    public statusCode: number = 500, 
+    public message: string,
+    public type: string = "error",
+    public validations: ValidationErrors = {}
+  ) {
     super(message);
-    this.name = "AppError";
-    this.statusCode = statusCode
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, AppError);
     }
+  }
+
+  public toResponseHttp<T>(): ResponseHttp<T> {
+    return {
+      error: {
+        type: "error",
+        message: this.message,
+        validations: this.validations,
+      },
+      status_code: this.statusCode,
+    };
   }
 }

@@ -8,8 +8,8 @@ import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 
 const initialState = {
-  error: undefined,
-  data: undefined
+  error: null,
+  data: null
 } 
 
 export function Form() {
@@ -52,7 +52,7 @@ export function Form() {
           placeholder="seuemail@exemplo.com"
           className={`${emailValidationError && 'border-red-700'}`}
         />
-        { emailValidationError && <span className="text-sm text-red-800">{emailValidationError}</span> }
+        { emailValidationError && <span className="text-sm text-red-800">{emailValidationError.message}</span> }
       </div>
       
       <Button className="w-full" type="submit" disabled={pending}>
