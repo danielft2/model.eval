@@ -8,8 +8,8 @@ export function Navigation() {
 
   return (
     <div className="space-x-3 transform -translate-x-1/2">
-      <Menu href="/workspace/work" activePath={pathname.endsWith("/work")}>Seu Trabalho</Menu>
-      <Menu href="/workspace/models" activePath={pathname.endsWith("/models")}>Seus Modelos</Menu>  
+      <Menu href="/workspace/work" activePath={pathname.includes("/work")}>Seu Trabalho</Menu>
+      <Menu href="/workspace/models" activePath={pathname.includes("/models")}>Seus Modelos</Menu>  
     </div>
   );
 }
