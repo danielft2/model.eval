@@ -13,6 +13,9 @@ export async function retrieveAutomaticEvaluationDetails(evaluationId: string): 
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      next: {
+        tags: ['evaluation-details'],
+      }
     }
   );
 

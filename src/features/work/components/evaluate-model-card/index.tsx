@@ -8,9 +8,10 @@ import { useParams } from "next/navigation";
 
 type EvaluateModelCardProps = {
   model: EvaluatedModel;
+  isAvaliableForEvaluation: boolean
 };
 
-export function EvaluateModelCard({ model }: EvaluateModelCardProps) {
+export function EvaluateModelCard({ model, isAvaliableForEvaluation }: EvaluateModelCardProps) {
   const params = useParams<{ evaluation_id: string }>()
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [metricResult, setMetricResult] = useState(model.metric_result);
@@ -49,7 +50,7 @@ export function EvaluateModelCard({ model }: EvaluateModelCardProps) {
           variant="evaluate"
           size="sm"
           onClick={handleEvaluateMode}
-          disabled={isEvaluating}
+          disabled={isEvaluating || !isAvaliableForEvaluation}
         >
           Avaliar modelo
           { isEvaluating && <LoaderCircle className="animate-spin"/> }
