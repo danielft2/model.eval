@@ -43,6 +43,31 @@ export class AppFetch implements HttpClient {
     }
   }
 
+  public async POST_T<T>(
+    endpoint: string,
+    options?: RequestOptions
+  ): Promise<ResponseHttp<T>> {
+    const url = `${this.baseUrl}${endpoint}`;
+    const config = {
+      method: 'POST',
+      headers: {
+        ...options?.headers,
+      },
+      ...options
+    };
+
+    try {
+      const response = await fetch(url, config);
+      const data: ResponseHttp<T> = await response.json();
+      
+      this.verifyResponse<T>(response, data);
+      
+      return data;
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
   public async PUT<T>(
     endpoint: string,
     options?: RequestOptions
@@ -74,6 +99,7 @@ export class AppFetch implements HttpClient {
   }
 
   private handleError<T = unknown>(error: unknown): ResponseHttp<T> {
+    console.log(error)
     if (error instanceof AppError) {
       return error.toResponseHttp<T>();
     }

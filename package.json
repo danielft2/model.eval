@@ -12,6 +12,7 @@
     "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-tabs": "^1.1.2",
+    "ag-grid-react": "^33.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "jose": "^5.9.6",
@@ -19,6 +20,7 @@
     "model_eval": "file:",
     "next": "15.1.0",
     "next-themes": "^0.4.4",
+    "papaparse": "^5.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sonner": "^1.7.1",
@@ -29,6 +31,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
+    "@types/papaparse": "^5.3.15",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
