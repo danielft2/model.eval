@@ -1,12 +1,8 @@
-import {
-  BrainCircuit,
-  CircleCheck,
-  MoreHorizontal,
-  TableProperties,
-} from "lucide-react";
-import Link from "next/link";
 import { AutomaticEvaluation } from "@/features/work/types/automatic-evaluation";
-import { Button } from "@/components/ui/button";
+
+import { BrainCircuit, CircleCheck, TableProperties } from "lucide-react";
+import Link from "next/link";
+import { AutomaticEvaluationCardOptions } from "./automatic-evaluation-card-options";
 
 type AutomaticEvaluationCardProps = {
   data: AutomaticEvaluation;
@@ -56,9 +52,7 @@ export function AutomaticEvaluationCard({
         </div>
       </Link>
 
-      <Button variant="outline" size="icon" className="absolute top-4 right-4 text-slate-600">
-        <MoreHorizontal size={16} />
-      </Button>
+      <AutomaticEvaluationCardOptions evaluationId={data.id}/>
     </div>
   );
 }

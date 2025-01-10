@@ -63,6 +63,25 @@ export class AppFetch implements HttpClient {
     }
   }
 
+  public async DELET<T>(
+    endpoint: string,
+    options?: RequestOptions
+  ): Promise<ResponseHttp<T>> {
+    const url = `${this.baseUrl}${endpoint}`;
+    const config = this.buildRequestConfig("DELETE", options);
+
+    try {
+      const response = await fetch(url, config);
+      const data: ResponseHttp<T> = await response.json();
+      
+      this.verifyResponse<T>(response, data);
+      
+      return data;
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
   private verifyResponse<T>(response: Response, data: ResponseHttp<T>) {
     if (!response.ok) {
       throw new AppError(
