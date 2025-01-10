@@ -1,5 +1,6 @@
+import { retrieveAccessToken } from '@/actions/retrieve-access-token';
+import { verifyResponse } from '@/actions/verify-response';
 import { fetchClient } from '@/api/fetch-client';
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 type Body = {
@@ -8,9 +9,8 @@ type Body = {
 }
 
 export async function PUT(request: Request) {
-  const token = (await cookies()).get('token')?.value;
-  const { modelId, evaluationId } = await request.json() as Body;
-  console.log(evaluationId)
+  const token = retrieveAccessToken();
+  const { modelId } = await request.json() as Body;
 
   const response = await fetchClient.PUT(`/evaluate-model/${modelId}`, {
     headers: {
@@ -18,8 +18,10 @@ export async function PUT(request: Request) {
     },
   });
 
+  await verifyResponse(response)
+
   return NextResponse.json({
-    data: response.data || null,
-    error: response.error?.message || null,
+    data: response?.data || null,
+    error: response?.error?.message || null,
   })
 }

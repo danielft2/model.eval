@@ -1,4 +1,5 @@
 import { retrieveAccessToken } from "@/actions/retrieve-access-token";
+import { verifyResponse } from "@/actions/verify-response";
 import { fetchClient } from "@/api/fetch-client";
 import { ResponseApp } from "@/api/response";
 import { AutomaticEvaluationDetails } from "@/features/work/types/automatic-evaluation-details";
@@ -19,8 +20,10 @@ export async function retrieveAutomaticEvaluationDetails(evaluationId: string): 
     }
   );
 
+  await verifyResponse(response);
+
   return {
-    data: response.data || null,
-    error: response.error?.message || null,
+    data: response?.data || null,
+    error: response?.error?.message || null,
   };
 }
