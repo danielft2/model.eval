@@ -1,6 +1,7 @@
 "use server";
 
 import { retrieveAccessToken } from "@/actions/retrieve-access-token";
+import { verifyResponse } from "@/actions/verify-response";
 import { fetchClient } from "@/api/fetch-client";
 import { ResponseApp } from "@/api/response";
 import { revalidateTag } from "next/cache";
@@ -20,6 +21,8 @@ export async function importFileTestAction(
       body: form,
     }
   );
+
+  await verifyResponse(response)
 
   if (response.data) {
     revalidateTag("evaluation-details");
