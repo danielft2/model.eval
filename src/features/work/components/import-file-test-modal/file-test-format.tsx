@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Papa from "papaparse";
 
 import { ModuleRegistry, AllCommunityModule, ColDef } from "ag-grid-community";
-import { fileTestCollumsDataExample, fileTestRowDataExample,  RowData } from "@/data/file-test-example";
+import { fileTestCollumsDataExample, fileTestRowDataExample,  RowData } from "@/features/work/data/file-test-example";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
