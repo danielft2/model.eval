@@ -26,10 +26,11 @@ export class AppFetch implements HttpClient {
 
   public async POST<T>(
     endpoint: string,
+    body: unknown,
     options?: RequestOptions
   ): Promise<ResponseHttp<T>> {
     const url = `${this.baseUrl}${endpoint}`;
-    const config = this.buildRequestConfig("POST", options);
+    const config = this.buildRequestConfig("POST", options, body);
 
     try {
       const response = await fetch(url, config);
@@ -62,7 +63,7 @@ export class AppFetch implements HttpClient {
     }
   }
 
-  private async verifyResponse<T>(response: Response, data: ResponseHttp<T>): Promise<void> {
+  private verifyResponse<T>(response: Response, data: ResponseHttp<T>) {
     if (!response.ok) {
       throw new AppError(
         response.status,
@@ -87,14 +88,17 @@ export class AppFetch implements HttpClient {
     };
   }
 
-  private buildRequestConfig(method: string, options?: RequestOptions): RequestInit {
+  private buildRequestConfig(method: string, options?: RequestOptions, body?: unknown): RequestInit {
+    const { headers, ...rest } = options || {};
+
     return {
       method,
       headers: {
         "Content-Type": "application/json",
-        ...options?.headers,
+        ...headers,
       },
-      ...options,
+      body: body ? JSON.stringify(body) : undefined,
+      ...rest,
     };
   }
 }

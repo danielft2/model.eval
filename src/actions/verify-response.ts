@@ -1,3 +1,5 @@
+'use server'
+
 import { ResponseHttp } from "@/infra/http/response";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -7,4 +9,6 @@ export async function verifyResponse<T>(response: ResponseHttp<T>) {
     (await cookies()).delete('token');
     redirect('/auth/signin');
   }
+
+  return response;
 }

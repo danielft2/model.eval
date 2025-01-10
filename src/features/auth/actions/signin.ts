@@ -32,10 +32,9 @@ export async function signinAction(
       },
     };
   }
-
-  const response = await fetchClient.POST<{ data: string, message: string }>("/auth/signin", {
-    body: JSON.stringify({ email }),
-  });
+  
+  
+  const response = await fetchClient.POST<{ data: string, message: string }>("/auth/signin", {email});
 
   return {
     data: {

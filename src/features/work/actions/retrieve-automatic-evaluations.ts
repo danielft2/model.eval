@@ -15,7 +15,7 @@ export async function retrieveAutomaticEvaluationsAction(): Promise<
         Authorization: `Bearer ${token}`,
       },
       next: {
-        revalidate: 60,
+        tags: ["automatic-evaluations"],
       },
     }
   );
