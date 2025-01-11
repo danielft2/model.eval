@@ -12,11 +12,15 @@ export async function PUT(request: Request) {
   const token = retrieveAccessToken();
   const { modelId } = await request.json() as Body;
 
-  const response = await fetchClient.PUT(`/evaluate-model/${modelId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await fetchClient.request({
+    method: 'PUT',
+    endpoint: `/models/${modelId}/evaluate`,
+    options: {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }
+  }) 
 
   await verifyResponse(response)
 

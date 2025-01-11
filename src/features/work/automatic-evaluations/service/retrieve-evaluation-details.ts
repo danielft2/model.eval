@@ -3,6 +3,7 @@ import { verifyResponse } from "@/actions/verify-response";
 import { fetchClient } from "@/api/fetch-client";
 import { ResponseApp } from "@/api/response";
 import { AutomaticEvaluationDetailsResponse } from "../http/responses/automatic-evaluation-details";
+import { REVALIDATE_TAGS } from "@/constants/revalidate-tags";
 
 export async function retrieveEvaluationDetails(
   evaluationId: string
@@ -17,7 +18,7 @@ export async function retrieveEvaluationDetails(
           Authorization: `Bearer ${token}`,
         },
         next: {
-          tags: ["evaluation-details"],
+          tags: [REVALIDATE_TAGS.AUTOMATIC_EVALUATION_DETAILS],
         },
       },
     });
