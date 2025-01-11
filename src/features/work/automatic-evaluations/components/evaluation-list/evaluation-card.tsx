@@ -1,8 +1,9 @@
-import { AutomaticEvaluationResponse } from "@/features/work/automatic-evaluations/http/responses/automatic-evaluation-response";
-
 import { BrainCircuit, CircleCheck, TableProperties } from "lucide-react";
 import Link from "next/link";
+
+import { AutomaticEvaluationResponse } from "@/features/work/automatic-evaluations/http/responses/automatic-evaluation-response";
 import { EvaluationCardOptions } from "./automatic-evaluation-card-options";
+import { Suspense } from "react";
 
 type AutomaticEvaluationCardProps = {
   data: AutomaticEvaluationResponse;
@@ -51,8 +52,10 @@ export function EvaluationCard({
           </p>
         </div>
       </Link>
-
-      <EvaluationCardOptions evaluationId={data.id}/>
+      
+      <Suspense>
+        <EvaluationCardOptions evaluationId={data.id}/>
+      </Suspense>
     </div>
   );
 }

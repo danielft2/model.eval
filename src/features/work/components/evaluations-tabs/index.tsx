@@ -28,8 +28,10 @@ export function EvaluationsTabs() {
             Humanas
           </Tabs.Trigger>
         </Tabs.List>
-
-        <NewEvaluationButton />
+        
+        <Suspense>
+          <NewEvaluationButton />
+        </Suspense>
       </div>
       <Tabs.Content
         className="grow rounded-b-md bg-white py-5 outline-none"

@@ -1,16 +1,32 @@
-'use client'
+"use client";
+
+import { ListVideo } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { EvaluationInsertModal } from "@/features/work/automatic-evaluations/components/evaluation-insert";
-import { ListVideo } from "lucide-react";
-import { useState } from "react";
 
 export function NewEvaluationButton() {
   const [isOpen, setIsOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  function handleNewEvaluation() {
+    if (searchParams.has("edit")) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("edit");
+      router.push(`${pathname}?${params.toString()}`);
+      setTimeout(() => setIsOpen(true), 100)
+    } else {
+      setIsOpen(true);
+    }
+  }
 
   return (
     <>
-      <Button size="sm" className="gap-1" onClick={() => setIsOpen(true)}>
+      <Button size="sm" className="gap-1" onClick={handleNewEvaluation}>
         <ListVideo />
         Nova avaliação
       </Button>

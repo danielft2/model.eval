@@ -19,16 +19,7 @@ const modelConfigScheme = z
 
 export const evaluationInsertScheme = z.object({
   title: z.string().nonempty("O título é obrigatório."),
-  metric_id: z
-    .string()
-    .nonempty("A métrica é obrigatória.")
-    .transform((value) => {
-      const parsedValue = parseInt(value);
-      if (isNaN(parsedValue)) {
-        throw new Error("A métrica é obrigatória.");
-      }
-      return parsedValue;
-    }),
+  metric_id: z.string().nonempty("A métrica é obrigatória."),
   model_dg: modelConfigScheme,
   model_qg: modelConfigScheme,
   model_qa: modelConfigScheme,

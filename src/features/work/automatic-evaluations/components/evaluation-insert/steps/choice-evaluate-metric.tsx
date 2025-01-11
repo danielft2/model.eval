@@ -25,7 +25,11 @@ type ChoiceEvaluateMetricData = Pick<
   "metric_id" | "title"
 >;
 
-export function ChoiceEvaluateMetric() {
+type ChoiceEvaluateMetricProps = {
+  isLoading: boolean;
+};
+
+export function ChoiceEvaluateMetric({ isLoading }: ChoiceEvaluateMetricProps) {
   const { nextStep } = useWizard();
   const {
     register,
@@ -99,6 +103,7 @@ export function ChoiceEvaluateMetric() {
               id="titulo_avaliacao"
               type="text"
               className={clsx("", titleErrorMessage && "invalid-field")}
+              disabled={isLoading}
               {...register("title")}
             />
             <ErrorField message={titleErrorMessage} />
@@ -115,15 +120,13 @@ export function ChoiceEvaluateMetric() {
               name="metric_id"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Select
-                  onValueChange={onChange}
-                  value={value?.toString() || ""}
-                >
+                <Select onValueChange={onChange} value={value || ""}>
                   <SelectTrigger
                     className={clsx(
                       "w-full",
                       metricErrorMessage && "invalid-field"
                     )}
+                    disabled={isLoading}
                   >
                     <SelectValue
                       placeholder="Escolha uma métrica"
@@ -151,6 +154,7 @@ export function ChoiceEvaluateMetric() {
           type="submit"
           className="min-w-[100px]"
           onClick={handleNextStep}
+          disabled={isLoading}
         >
           Continuar
         </Button>

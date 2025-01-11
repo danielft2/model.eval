@@ -1,14 +1,18 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Wizard } from "react-use-wizard";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import { insertEvaluationAction } from "@/features/work/automatic-evaluations/actions/insert-evaluation";
+import { retrieveEvaluationDetailsAction } from "@/features/work/automatic-evaluations/actions/retrieve-evaluation-details";
 import { evaluationInsertScheme } from "@/features/work/automatic-evaluations/schemes/evalution-insert";
+import { useLoadingStore } from "@/store/loading-store";
+import { ModelType } from "@/types/model-type";
 
 import { ChoiceEvaluateMetric } from "./steps/choice-evaluate-metric";
 import { ModelDGConfig } from "./steps/model-dg-config";
@@ -22,20 +26,25 @@ type FormWrappperProps = {
 export type EvaluationInsertData = z.infer<typeof evaluationInsertScheme>;
 
 export function EvaluationInsertForm({ onClose }: FormWrappperProps) {
-  const [isLoading, setIsLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const editEvaluationId = searchParams.get("edit");
 
-  const evaluationInsertForm = useForm<EvaluationInsertData>({ 
+  const { isLoading, changeLoadingState } = useLoadingStore();
+
+  const evaluationInsertForm = useForm<EvaluationInsertData>({
     mode: "all",
-    resolver: zodResolver(evaluationInsertScheme)
-  })
+    resolver: zodResolver(evaluationInsertScheme),
+  });
 
   const { getValues } = evaluationInsertForm;
 
   async function handleSubmitData() {
-    setIsLoading(true);
-
     try {
-      const response = await insertEvaluationAction(getValues());
+      changeLoadingState(true)
+
+      const evaluationId = editEvaluationId ? parseInt(editEvaluationId) : undefined;
+      const response = await insertEvaluationAction(getValues(), evaluationId);
+
       if (!response.error) {
         toast.success(response.data);
         onClose();
@@ -43,18 +52,53 @@ export function EvaluationInsertForm({ onClose }: FormWrappperProps) {
         toast.error(response.error);
       }
     } finally {
-      setIsLoading(false);
+      changeLoadingState(false)
     }
   }
 
+  const retrieveDetails = useCallback(
+    async (evaluationId: string) => {
+      try {
+        changeLoadingState(true)
+        const response = await retrieveEvaluationDetailsAction(evaluationId);
+        if (response.data) {
+          const { evaluation, models } = response.data;
+          
+          const modelQG = models.find((model) => model.task_id == ModelType.QUESTION_GENERATE);
+          const modelQA = models.find((model) => model.task_id == ModelType.QUESTION_ANSWER);
+          const modelDG = models.find((model) => model.task_id == ModelType.DISTRACTOR_GENERATE);
+
+          evaluationInsertForm.reset({
+            title: evaluation.title,
+            metric_id: evaluation.metric_id.toString(),
+            model_qg: modelQG,
+            model_qa: modelQA,
+            model_dg: modelDG,
+          });
+        }
+      } finally {
+        changeLoadingState(false)
+      }
+    },
+    [evaluationInsertForm, changeLoadingState]
+  );
+
+  useEffect(() => {
+    if (editEvaluationId) {
+      retrieveDetails(editEvaluationId);
+    }
+  }, [editEvaluationId, retrieveDetails]);
+
   return (
-    <FormProvider {...evaluationInsertForm}>
-      <Wizard>
-        <ChoiceEvaluateMetric />
-        <ModelQGConfig />
-        <ModelQAConfig />
-        <ModelDGConfig onFinish={handleSubmitData} isLoading={isLoading} />
-      </Wizard>
-    </FormProvider>
+    <>
+      <FormProvider {...evaluationInsertForm}>
+        <Wizard>
+          <ChoiceEvaluateMetric isLoading={isLoading} />
+          <ModelQGConfig />
+          <ModelQAConfig />
+          <ModelDGConfig onFinish={handleSubmitData} isLoading={isLoading} />
+        </Wizard>
+      </FormProvider>
+    </>
   );
 }

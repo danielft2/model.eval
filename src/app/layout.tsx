@@ -3,6 +3,7 @@ import { Raleway, Work_Sans } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 import { AlertCircle, CircleCheck } from "lucide-react";
+import { IndeterminateBar } from "@/components/ui/indeterminate-bar";
 
 const workSans = Work_Sans({
   variable: "--font-work-sans",
@@ -48,6 +49,8 @@ export default function RootLayout({
             },
           }}
         />
+
+        <IndeterminateBar />
       </body>
     </html>
   );
