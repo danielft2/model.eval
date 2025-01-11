@@ -11,45 +11,46 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { EvaluationInsertFormContext } from "@/features/work/automatic-evaluations/context/evaluation-insert-form";
-import { evaluationInsertScheme } from "@/features/work/automatic-evaluations/schemes/evalution-insert";
-
-import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { FileSpreadsheet, Info } from "lucide-react";
-import { use } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { useWizard } from "react-use-wizard";
-import z from "zod";
 
-type FormData = z.infer<typeof evaluationInsertScheme>;
+import { EvaluationInsertData } from "@/features/work/automatic-evaluations/components/evaluation-insert/evaluation-insert-form";
+import { ErrorField } from "@/components/ui/error-field";
+import clsx from "clsx";
+
+type ChoiceEvaluateMetricData = Pick<
+  EvaluationInsertData,
+  "metric_id" | "title"
+>;
 
 export function ChoiceEvaluateMetric() {
   const { nextStep } = useWizard();
-  const { updateEvaluation, evaluationData } = use(EvaluationInsertFormContext);
-
   const {
     register,
-    handleSubmit,
     control,
-    formState: { isValid, errors },
-  } = useForm<FormData>({
-    mode: "all",
-    resolver: zodResolver(evaluationInsertScheme),
-    defaultValues: {
-      title: evaluationData.title,
-      metric_id: evaluationData.metric_id,
-    },
-  });
+    setValue,
+    getValues,
+    trigger,
+    formState: { errors },
+  } = useFormContext<ChoiceEvaluateMetricData>();
 
-  function handleNextStep(data: FormData) {
-    console.log(errors.metric_id);
-    updateEvaluation(data);
+  async function handleNextStep() {
+    const isValid = await trigger(["metric_id", "title"]);
+    if (!isValid) return;
+
+    const data = getValues();
+    setValue("metric_id", data.metric_id, { shouldValidate: true });
+    setValue("title", data.title, { shouldValidate: true });
     nextStep();
   }
 
+  const titleErrorMessage = errors.title?.message;
+  const metricErrorMessage = errors.metric_id?.message;
+
   return (
-    <div>
+    <div className="flex-1 flex flex-col justify-between">
       <div className="space-y-7">
         <div className="flex items-center justify-between mb-7">
           <div className="flex items-center gap-2">
@@ -86,7 +87,7 @@ export function ChoiceEvaluateMetric() {
 
         <Divider />
 
-        <form className="flex items-center gap-4">
+        <form className="flex gap-4">
           <div className="space-y-1 flex-1">
             <label
               htmlFor="titulo_avaliacao"
@@ -94,7 +95,13 @@ export function ChoiceEvaluateMetric() {
             >
               Título da avaliação
             </label>
-            <Input id="titulo_avaliacao" type="text" {...register("title")} />
+            <Input
+              id="titulo_avaliacao"
+              type="text"
+              className={clsx("", titleErrorMessage && "invalid-field")}
+              {...register("title")}
+            />
+            <ErrorField message={titleErrorMessage} />
           </div>
 
           <div className="space-y-1 flex-1">
@@ -112,7 +119,12 @@ export function ChoiceEvaluateMetric() {
                   onValueChange={onChange}
                   value={value?.toString() || ""}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger
+                    className={clsx(
+                      "w-full",
+                      metricErrorMessage && "invalid-field"
+                    )}
+                  >
                     <SelectValue
                       placeholder="Escolha uma métrica"
                       className="text-slate-600"
@@ -124,20 +136,21 @@ export function ChoiceEvaluateMetric() {
                 </Select>
               )}
             />
+            <ErrorField message={metricErrorMessage} />
           </div>
         </form>
       </div>
 
       <div className="mt-[25px] flex gap-2 justify-end">
         <DialogClose asChild>
-          <Button variant="secondary" type="button">
+          <Button variant="secondary" className="min-w-[100px]" type="button">
             Cancelar
           </Button>
         </DialogClose>
         <Button
           type="submit"
-          onClick={handleSubmit(handleNextStep)}
-          disabled={!isValid}
+          className="min-w-[100px]"
+          onClick={handleNextStep}
         >
           Continuar
         </Button>

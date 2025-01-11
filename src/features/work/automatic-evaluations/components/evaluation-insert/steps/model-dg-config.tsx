@@ -1,47 +1,43 @@
+import { FileSpreadsheet } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+import { useWizard } from "react-use-wizard";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { EvaluationInsertFormContext } from "@/features/work/automatic-evaluations/context/evaluation-insert-form";
-import {
-  ModelConfig,
-  modelConfigScheme,
-} from "@/features/work/automatic-evaluations/schemes/model-config";
-import { AutomaticEvaluationInsertDto } from "@/features/work/automatic-evaluations/http/dtos/automatic-evaluation-insert";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FileSpreadsheet } from "lucide-react";
-import { use } from "react";
-import { useForm } from "react-hook-form";
-import { useWizard } from "react-use-wizard";
+import { EvaluationInsertData } from "@/features/work/automatic-evaluations/schemes/evalution-insert";
+import { ErrorField } from "@/components/ui/error-field";
 
 type ModelDGConfigProps = {
-  onFinish: (data: AutomaticEvaluationInsertDto) => void;
+  onFinish: () => void;
   isLoading: boolean;
 };
 
 export function ModelDGConfig({ onFinish, isLoading }: ModelDGConfigProps) {
   const { previousStep } = useWizard();
 
-  const { updateEvaluation, evaluationData } = use(EvaluationInsertFormContext);
-  const modelData = evaluationData.model_dg || {};
+  const {
+    register,
+    setValue,
+    getValues,
+    trigger,
+    formState: { errors },
+  } = useFormContext<EvaluationInsertData>();
 
-  const { register, handleSubmit } = useForm<ModelConfig>({
-    resolver: zodResolver(modelConfigScheme),
-    defaultValues: modelData,
-  });
+  async function handleNextStep() {
+    const isValid = await trigger(["model_dg"]);
+    if (!isValid) return;
 
-  async function handleNextStep(data: ModelConfig) {
-    let evaluation = { ...evaluationData };
-
-    if (data.model_title_id && data.input_text) {
-      updateEvaluation({ model_qg: data });
-      evaluation = { ...evaluationData, model_dg: data };
-    }
-
-    onFinish(evaluation);
+    const data = getValues();
+    setValue("model_dg", data.model_dg);
+    onFinish();
   }
 
+  const modelIdErrorMessage = errors.model_dg?.model_title_id?.message;
+  const inputTextErrorMessage = errors.model_dg?.model_title_id?.message;
+
   return (
-    <>
+    <div className="flex-1 flex flex-col justify-between">
       <div className="space-y-7">
         <div className="flex items-center justify-between mb-7">
           <div className="flex items-center gap-2">
@@ -68,7 +64,14 @@ export function ModelDGConfig({ onFinish, isLoading }: ModelDGConfigProps) {
             >
               Modelo (HugginfaceID)
             </label>
-            <Input id="model_id" type="text" {...register("model_title_id")} />
+            <Input
+              id="model_id"
+              type="text"
+              className={modelIdErrorMessage && "invalid-field"}
+              {...register("model_dg.model_title_id")}
+            />
+
+            <ErrorField message={modelIdErrorMessage} />
           </div>
 
           <div className="space-y-1 flex-grow">
@@ -80,12 +83,13 @@ export function ModelDGConfig({ onFinish, isLoading }: ModelDGConfigProps) {
             </label>
             <Textarea
               id="input_text"
-              placeholder="Exemplo: “What would be incorrect answers to the question?\n\n{texto}\n\nQuestion: 
-                {question}\n\nResponse: {answer}”
-              "
+              placeholder="Exemplo: “What would be incorrect answers to the question?\n\n{texto}\n\nQuestion: {question}\n\nResponse: {answer}”"
               rows={2}
-              {...register("input_text")}
+              className={inputTextErrorMessage && "invalid-field"}
+              {...register("model_dg.input_text")}
             />
+
+            <ErrorField message={inputTextErrorMessage} />
           </div>
         </form>
       </div>
@@ -93,15 +97,15 @@ export function ModelDGConfig({ onFinish, isLoading }: ModelDGConfigProps) {
       <div className="mt-[25px] flex gap-2 justify-end">
         <Button
           variant="secondary"
+          className="min-w-[100px]"
           onClick={() => previousStep()}
-          disabled={isLoading}
         >
-          Anterior
+          Voltar
         </Button>
-        <Button onClick={handleSubmit(handleNextStep)} disabled={isLoading}>
+        <Button className="min-w-[100px]" disabled={isLoading} onClick={handleNextStep}>
           Finalizar
         </Button>
       </div>
-    </>
+    </div>
   );
 }

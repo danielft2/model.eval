@@ -1,40 +1,38 @@
+import { FileSpreadsheet } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+import { useWizard } from "react-use-wizard";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
-import { EvaluationInsertFormContext } from "@/features/work/automatic-evaluations/context/evaluation-insert-form";
-import { ModelConfig, modelConfigScheme } from "@/features/work/automatic-evaluations/schemes/model-config";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FileSpreadsheet } from "lucide-react";
-import { use } from "react";
-import { useForm } from "react-hook-form";
-import { useWizard } from "react-use-wizard";
+import { EvaluationInsertData } from "@/features/work/automatic-evaluations/schemes/evalution-insert";
+import { ErrorField } from "@/components/ui/error-field";
 
 export function ModelQAConfig() {
   const { previousStep, nextStep } = useWizard();
 
-  const { updateEvaluation, evaluationData } = use(EvaluationInsertFormContext);
-    const modelQGData = evaluationData.model_qa || {};
-  
-    const {
-      register,
-      handleSubmit,
-    } = useForm<ModelConfig>({
-      mode: "onBlur",
-      resolver: zodResolver(modelConfigScheme),
-      defaultValues: modelQGData,
-    });
-  
-    function handleNextStep(data: ModelConfig) {
-      if (data.model_title_id && data.input_text) {
-        updateEvaluation({ model_qa: data });
-      }
-      nextStep();
-    }
+  const {
+    register,
+    setValue,
+    getValues,
+    trigger,
+    formState: { errors }
+  } = useFormContext<EvaluationInsertData>();
+
+  async function handleNextStep() {
+    const isValid = await trigger(["model_qa"]);
+    if (!isValid) return; 
+
+    const data = getValues()
+    setValue("model_qa", data.model_qa);
+    nextStep();
+  }
+
+  const modelIdErrorMessage = errors.model_qa?.model_title_id?.message;
+  const inputTextErrorMessage = errors.model_qa?.model_title_id?.message;
 
   return (
-    <>
+    <div className="flex-1 flex flex-col justify-between">
       <div className="space-y-7">
         <div className="flex items-center justify-between mb-7">
           <div className="flex items-center gap-2">
@@ -61,7 +59,13 @@ export function ModelQAConfig() {
             >
               Modelo (HugginfaceID)
             </label>
-            <Input id="model_id" type="text" {...register('model_title_id')} />
+            <Input
+              id="model_id"
+              type="text"
+              className={modelIdErrorMessage && "invalid-field"}
+              {...register("model_qa.model_title_id")}
+            />
+            <ErrorField message={modelIdErrorMessage}/>
           </div>
 
           <div className="space-y-1 flex-grow">
@@ -75,18 +79,26 @@ export function ModelQAConfig() {
               id="input_text"
               placeholder="Exemplo: “{texto}\n\nAnswer this question based on the article: {comando}”"
               rows={2}
-              {...register('input_text')}
+              className={modelIdErrorMessage && "invalid-field"}
+              {...register("model_qa.input_text")}
             />
+            <ErrorField message={inputTextErrorMessage}/>
           </div>
         </form>
       </div>
 
       <div className="mt-[25px] flex gap-2 justify-end">
-        <Button variant="secondary" onClick={() => previousStep()}>
-          Anterior
+      <Button
+          variant="secondary"
+          className="min-w-[100px]"
+          onClick={() => previousStep()}
+        >
+          Voltar
         </Button>
-        <Button onClick={handleSubmit(handleNextStep)}>Continuar</Button>
+        <Button className="min-w-[100px]" onClick={handleNextStep}>
+          Continuar
+        </Button>
       </div>
-    </>
+    </div>
   );
 }
