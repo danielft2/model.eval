@@ -32,9 +32,14 @@ export async function signinAction(
       },
     };
   }
-  
-  
-  const response = await fetchClient.POST<{ data: string, message: string }>("/auth/signin", {email});
+
+  const response = await fetchClient.request<{ data: string; message: string }>(
+    {
+      method: "POST",
+      endpoint: "/auth/signin",
+      body: { email },
+    }
+  );
 
   return {
     data: {
@@ -42,7 +47,7 @@ export async function signinAction(
     },
     error: {
       message: response.error?.message || "",
-      validations: response.error?.validations
+      validations: response.error?.validations,
     },
   };
 }

@@ -5,7 +5,14 @@ export type RequestOptions = RequestInit & {
   headers?: Record<string, string>;
 };
 
+export type RequestConfig = {
+  method: "GET" | "POST" | "PUT" | "DELETE";
+  endpoint: string;
+  options?: RequestOptions;
+  body?: BodyInit | undefined | null | unknown;
+  isMultipart?: boolean;
+}
+
 export interface HttpClient {
-  GET<T = unknown>(endpoint: string, options?: RequestOptions): Promise<ResponseHttp<T>> 
-  POST<T = unknown>(endpoint: string, body: unknown, options?: RequestOptions): Promise<ResponseHttp<T>> 
+  request<T = unknown>(config: RequestConfig): Promise<ResponseHttp<T>> 
 }

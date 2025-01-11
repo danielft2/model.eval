@@ -1,7 +1,7 @@
 import { Divider } from "@/components/ui/divider";
-import { retrieveAutomaticEvaluationDetails } from "@/features/work/actions/retrieve-automatic-evaluation-details";
-import { EvaluateModelCard } from "@/features/work/components/evaluate-model-card";
-import { Header } from "@/features/work/components/header";
+import { retrieveEvaluationDetails } from "@/features/work/automatic-evaluations/service/retrieve-evaluation-details";
+import { EvaluationDetailsHeader } from "@/features/work/automatic-evaluations/components/evaluation-details/evaluation-details-header";
+import { EvaluateModelCard } from "@/features/work/automatic-evaluations/components/evaluation-details/evaluate-model-card";
 
 type Params = {
   evaluation_id: string;
@@ -13,12 +13,12 @@ export default async function EvaluationDetailsPage({
   params: Params;
 }) {
   const { evaluation_id } = await params;
-  const details = await retrieveAutomaticEvaluationDetails(evaluation_id);
-  const avaliableForEvaluation = !!details.data?.evaluation.filename_test
+  const details = await retrieveEvaluationDetails(evaluation_id);
+  const avaliableForEvaluation = !!details.data?.evaluation.filename_test;
 
   return (
     <>
-      <Header />
+      <EvaluationDetailsHeader />
 
       <Divider />
 

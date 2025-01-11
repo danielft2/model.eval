@@ -2,8 +2,8 @@ import * as Tabs from "@radix-ui/react-tabs";
 import { CircleUserRound, Wrench } from "lucide-react";
 import { Suspense } from "react";
 
-import { AutomaticEvaluationList } from "./automatic-evaluation/automatic-evaluation-list";
-import { NewEvaluation } from "./new-evaluation";
+import { AutomaticEvaluationList } from "../../automatic-evaluations/components/evaluation-list";
+import { NewEvaluationButton } from "./new-evaluation-button";
 
 export function EvaluationsTabs() {
   return (
@@ -29,7 +29,7 @@ export function EvaluationsTabs() {
           </Tabs.Trigger>
         </Tabs.List>
 
-        <NewEvaluation />
+        <NewEvaluationButton />
       </div>
       <Tabs.Content
         className="grow rounded-b-md bg-white py-5 outline-none"
