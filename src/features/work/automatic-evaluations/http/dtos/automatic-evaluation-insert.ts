@@ -4,7 +4,7 @@ export type ModelConfig = {
 };
 
 export type AutomaticEvaluationInsertDto = {
-  metric_id: number;
+  metric_id: string;
   title: string;
   model_qg?: ModelConfig;
   model_qa?: ModelConfig;

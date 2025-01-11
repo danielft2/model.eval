@@ -7,13 +7,19 @@ import { AutomaticEvaluationInsertDto } from "@/features/work/automatic-evaluati
 import { revalidateTag } from "next/cache";
 
 export async function insertEvaluationAction(
-  data: AutomaticEvaluationInsertDto
+  data: AutomaticEvaluationInsertDto,
+  evaluationId?: number
 ): Promise<ResponseApp<string, string>> {
   const token = await retrieveAccessToken();
+  const method = evaluationId ? "PUT" : "POST";
+  const endpoint = evaluationId
+    ? `/automatic-evaluation/${evaluationId}`
+    : "/automatic-evaluation";
+
   const response = await fetchClient.request({
-    method: "POST",
-    endpoint: `/automatic-evaluation`,
-    body: data,
+    method,
+    endpoint,
+    body: { ...data, metric_id: parseInt(data.metric_id) },
     options: {
       headers: {
         Authorization: `Bearer ${token}`,
