@@ -1,81 +1,22 @@
-import { HttpClient, RequestOptions } from "@/infra/http/http-client";
+import { HttpClient, RequestConfig } from "@/infra/http/http-client";
 import { ResponseHttp } from "@/infra/http/response";
 import { AppError } from "./app-error";
 
 export class AppFetch implements HttpClient {
   private baseUrl = process.env.API_BASE_URL;
 
-  public async GET<T>(
-    endpoint: string,
-    options?: RequestOptions
-  ): Promise<ResponseHttp<T>> {
+  public async request<T>(config: RequestConfig): Promise<ResponseHttp<T>> {
+    const { endpoint, method } = config;
+
     const url = `${this.baseUrl}${endpoint}`;
-    const config = this.buildRequestConfig("GET", options);
+    const options_req = this.buildRequestConfig(method, config);
 
     try {
-      const response = await fetch(url, config);
+      const response = await fetch(url, options_req);
       const data: ResponseHttp<T> = await response.json();
-      
+
       this.verifyResponse(response, data);
 
-      return data;
-    } catch (error) {
-      return this.handleError(error);
-    }
-  }
-
-  public async POST<T>(
-    endpoint: string,
-    body: unknown,
-    options?: RequestOptions
-  ): Promise<ResponseHttp<T>> {
-    const url = `${this.baseUrl}${endpoint}`;
-    const config = this.buildRequestConfig("POST", options, body);
-
-    try {
-      const response = await fetch(url, config);
-      const data: ResponseHttp<T> = await response.json();
-      
-      this.verifyResponse<T>(response, data);
-      
-      return data;
-    } catch (error) {
-      return this.handleError(error);
-    }
-  }
-
-  public async PUT<T>(
-    endpoint: string,
-    options?: RequestOptions
-  ): Promise<ResponseHttp<T>> {
-    const url = `${this.baseUrl}${endpoint}`;
-    const config = this.buildRequestConfig("PUT", options);
-
-    try {
-      const response = await fetch(url, config);
-      const data: ResponseHttp<T> = await response.json();
-      
-      this.verifyResponse<T>(response, data);
-      
-      return data;
-    } catch (error) {
-      return this.handleError(error);
-    }
-  }
-
-  public async DELET<T>(
-    endpoint: string,
-    options?: RequestOptions
-  ): Promise<ResponseHttp<T>> {
-    const url = `${this.baseUrl}${endpoint}`;
-    const config = this.buildRequestConfig("DELETE", options);
-
-    try {
-      const response = await fetch(url, config);
-      const data: ResponseHttp<T> = await response.json();
-      
-      this.verifyResponse<T>(response, data);
-      
       return data;
     } catch (error) {
       return this.handleError(error);
@@ -107,8 +48,23 @@ export class AppFetch implements HttpClient {
     };
   }
 
-  private buildRequestConfig(method: string, options?: RequestOptions, body?: unknown): RequestInit {
-    const { headers, ...rest } = options || {};
+  private buildRequestConfig(
+    method: string,
+    config: RequestConfig
+  ): RequestInit {
+    const { headers, ...rest } = config?.options || {};
+    const body = config?.body;
+
+    if (config.isMultipart && body instanceof FormData) {
+      return {
+        method,
+        headers: {
+          ...headers,
+        },
+        body: body,
+        ...rest,
+      };
+    }
 
     return {
       method,
