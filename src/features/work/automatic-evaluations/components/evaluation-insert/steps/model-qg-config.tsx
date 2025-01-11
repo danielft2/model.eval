@@ -1,43 +1,38 @@
+import { FileSpreadsheet } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+import { useWizard } from "react-use-wizard";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
-import { EvaluationInsertFormContext } from "@/features/work/automatic-evaluations/context/evaluation-insert-form";
-import {
-  ModelConfig,
-  modelConfigScheme,
-} from "@/features/work/automatic-evaluations/schemes/model-config";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FileSpreadsheet } from "lucide-react";
-import { use } from "react";
-import { useForm } from "react-hook-form";
-import { useWizard } from "react-use-wizard";
+import { EvaluationInsertData } from "@/features/work/automatic-evaluations/schemes/evalution-insert";
+import { ErrorField } from "@/components/ui/error-field";
 
 export function ModelQGConfig() {
   const { previousStep, nextStep } = useWizard();
 
-  const { updateEvaluation, evaluationData } = use(EvaluationInsertFormContext);
-  const modelQGData = evaluationData.model_qg || {};
-
   const {
     register,
-    handleSubmit,
-  } = useForm<ModelConfig>({
-    mode: "onBlur",
-    resolver: zodResolver(modelConfigScheme),
-    defaultValues: modelQGData,
-  });
+    setValue,
+    trigger,
+    getValues,
+    formState: { errors },
+  } = useFormContext<EvaluationInsertData>();
 
-  function handleNextStep(data: ModelConfig) {
-    if (data.model_title_id && data.input_text) {
-      updateEvaluation({ model_qg: data })
-    } 
+  async function handleNextStep() {
+    const isValid = await trigger(["model_qg"]);
+    if (!isValid) return;
+
+    const data = getValues();
+    setValue("model_qg", data.model_qg);
     nextStep();
   }
 
+  const modelIdErrorMessage = errors.model_qg?.model_title_id?.message;
+  const inputTextErrorMessage = errors.model_qg?.model_title_id?.message;
+
   return (
-    <>
+    <div className="flex-1 flex flex-col justify-between">
       <div className="space-y-7">
         <div className="flex items-center justify-between mb-7">
           <div className="flex items-center gap-2">
@@ -64,7 +59,13 @@ export function ModelQGConfig() {
             >
               Modelo (HugginfaceID)
             </label>
-            <Input id="model_id" type="text" {...register("model_title_id")} />
+            <Input
+              id="model_id"
+              type="text"
+              className={modelIdErrorMessage && "invalid-field"}
+              {...register("model_qg.model_title_id")}
+            />
+            <ErrorField message={modelIdErrorMessage} />
           </div>
 
           <div className="space-y-1 flex-grow">
@@ -76,26 +77,28 @@ export function ModelQGConfig() {
             </label>
             <Textarea
               id="input_text"
-              placeholder="Exemplo: Write a question about the following article: {descritor}, 
-                {texto}\n\nQuestion about the article:
-              "
+              placeholder="Exemplo: Write a question about the following article: {descritor}, {texto}\n\nQuestion about the article:"
               rows={2}
-              {...register("input_text")}
+              className={inputTextErrorMessage && "invalid-field"}
+              {...register("model_qg.input_text")}
             />
+            <ErrorField message={inputTextErrorMessage} />
           </div>
         </form>
       </div>
 
       <div className="mt-[25px] flex gap-2 justify-end">
-        <Button variant="secondary" onClick={() => previousStep()}>
-          Anterior
-        </Button>
         <Button
-          onClick={handleSubmit(handleNextStep)}
+          variant="secondary"
+          className="min-w-[100px]"
+          onClick={() => previousStep()}
         >
+          Voltar
+        </Button>
+        <Button className="min-w-[100px]" onClick={handleNextStep}>
           Continuar
         </Button>
       </div>
-    </>
+    </div>
   );
 }

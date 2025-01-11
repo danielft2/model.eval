@@ -1,6 +1,6 @@
 export type ModelConfig = {
-  model_title_id: string;
-  input_text: string;
+  model_title_id?: string;
+  input_text?: string;
 };
 
 export type AutomaticEvaluationInsertDto = {

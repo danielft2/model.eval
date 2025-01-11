@@ -1,6 +1,7 @@
 "use server";
 
 import { retrieveAccessToken } from "@/actions/retrieve-access-token";
+import { verifyResponse } from "@/actions/verify-response";
 import { fetchClient } from "@/api/fetch-client";
 import { ResponseApp } from "@/api/response";
 import { revalidateTag } from "next/cache";
@@ -18,7 +19,8 @@ export async function deleteEvaluationAction(
       },
     },
   });
-
+  
+  await verifyResponse(response);
   if (response.data) revalidateTag("automatic-evaluations");
 
   return {
