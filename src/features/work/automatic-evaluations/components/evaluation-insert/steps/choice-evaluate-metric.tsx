@@ -109,7 +109,7 @@ export function ChoiceEvaluateMetric({ isLoading }: ChoiceEvaluateMetricProps) {
               name="metric_id"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Select onValueChange={onChange} value={value || ""}>
+                <Select onValueChange={onChange} value={value?.toString() || ""}>
                   <SelectTrigger
                     className={clsx(
                       "w-full",

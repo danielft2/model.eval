@@ -34,6 +34,9 @@ export function EvaluationInsertForm({ onClose }: FormWrappperProps) {
   const evaluationInsertForm = useForm<EvaluationInsertData>({
     mode: "all",
     resolver: zodResolver(evaluationInsertScheme),
+    defaultValues: {
+      metric_id: ""
+    }
   });
 
   const { getValues } = evaluationInsertForm;
