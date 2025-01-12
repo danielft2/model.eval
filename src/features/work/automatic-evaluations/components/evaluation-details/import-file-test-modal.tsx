@@ -4,11 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { importFileTestAction } from "@/features/work/automatic-evaluations/actions/import-file-test";
 import * as Dialog from "@radix-ui/react-dialog";
-import { ArrowUpFromLine, FileSpreadsheet, LoaderCircle, X } from "lucide-react";
+import {
+  ArrowUpFromLine,
+  FileSpreadsheet,
+  LoaderCircle,
+  X,
+} from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { FileTestFormat } from "./file-test-format";
+import { ShowConditional } from "@/components/ui/show-conditional";
+import { Show } from "@/components/ui/show";
 
 type ImportFileTestModalProps = {
   isOpen: boolean;
@@ -36,7 +43,7 @@ export function ImportFileTestModal({
     }
 
     try {
-      setIsLoading(true)
+      setIsLoading(true);
 
       const form = new FormData();
       form.append("file", file);
@@ -45,12 +52,12 @@ export function ImportFileTestModal({
 
       if (response.data) {
         toast.success(response.data);
-        setIsOpen(false)
+        setIsOpen(false);
       } else {
-        toast.error(response.error)
+        toast.error(response.error);
       }
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -120,8 +127,14 @@ export function ImportFileTestModal({
               <Button variant="secondary">Cancelar</Button>
             </Dialog.Close>
             <Button onClick={save} disabled={isLoading || !file}>
-              {isLoading ? "Salvando" : "Salvar"}
-              {isLoading && <LoaderCircle className="animate-spin size-full"/>}
+              <ShowConditional
+                condition={isLoading}
+                then={"Salvando"}
+                otherwise={"Salvar"}
+              />
+              <Show when={isLoading}>
+                <LoaderCircle className="animate-spin size-full" />
+              </Show>
             </Button>
           </div>
         </Dialog.Content>

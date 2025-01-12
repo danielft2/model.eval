@@ -6,6 +6,8 @@ import { HumanEvaluationResponse } from "@/features/work/human-evaluations/http/
 import { HumanEvaluationStatus } from "@/features/work/human-evaluations/types/evaluation-status";
 import { Badge } from "@/components/ui/badge";
 import { HumanEvaluationCardOptions } from "./evaluation-card-options";
+import { ShowConditional } from "@/components/ui/show-conditional";
+import { Show } from "@/components/ui/show";
 
 type HumanEvaluationCardProps = {
   data: HumanEvaluationResponse;
@@ -22,33 +24,39 @@ export function HumanEvaluationCard({ data }: HumanEvaluationCardProps) {
             {data.title}
           </h1>
           <div className="flex items-center gap-1">
-            {data.use_relevance && <Badge variant="blue">Relevância</Badge>}
-            {data.use_answerability && (
+            <Show when={data.use_relevance}>
+              <Badge variant="blue">Relevância</Badge>
+            </Show>
+            <Show when={data.use_answerability}>
               <Badge variant="violet">Respondibilidade</Badge>
-            )}
-            {data.use_utility && <Badge variant="green">Utilidade</Badge>}
+            </Show>
+            <Show when={data.use_utility}>
+              <Badge variant="green">Utilidade</Badge>
+            </Show>
           </div>
         </div>
 
         <div className="px-4 py-2 flex items-center gap-1 border-t border-slate-300">
-          {existsEvaluations ? (
-            <CircleCheck size={16} className="text-green-700" />
-          ) : (
-            <CircleMinus size={14} className="text-slate-600" />
-          )}
+          <ShowConditional
+            condition={existsEvaluations}
+            then={<CircleCheck size={16} className="text-green-700" />}
+            otherwise={<CircleMinus size={14} className="text-slate-600" />}
+          />
           <p className="font-heading -tracking-wider font-medium text-sm text-slate-800">
-            {existsEvaluations
-              ? `${data.evaluation_total} avaliações`
-              : "Ainda não possui avaliações"}
+            <ShowConditional
+              condition={existsEvaluations}
+              then={`${data.evaluation_total} avaliações`}
+              otherwise={"Ainda não possui avaliações"}
+            />
           </p>
         </div>
       </Link>
 
-      {data.status.id == HumanEvaluationStatus.UNAVAILABLE && (
+      <Show when={data.status.id == HumanEvaluationStatus.UNAVAILABLE}>
         <Suspense>
           <HumanEvaluationCardOptions evaluationId={data.id} />
         </Suspense>
-      )}
+      </Show>
     </div>
   );
 }

@@ -1,17 +1,25 @@
-import { BrainCircuit, CircleCheck, TableProperties } from "lucide-react";
+import {
+  BrainCircuit,
+  CircleCheck,
+  CircleMinus,
+  TableProperties,
+} from "lucide-react";
 import Link from "next/link";
 
 import { AutomaticEvaluationResponse } from "@/features/work/automatic-evaluations/http/responses/automatic-evaluation-response";
 import { EvaluationCardOptions } from "./automatic-evaluation-card-options";
 import { Suspense } from "react";
+import { ShowConditional } from "@/components/ui/show-conditional";
+import { Show } from "@/components/ui/show";
 
 type AutomaticEvaluationCardProps = {
   data: AutomaticEvaluationResponse;
 };
 
-export function EvaluationCard({
-  data,
-}: AutomaticEvaluationCardProps) {
+export function EvaluationCard({ data }: AutomaticEvaluationCardProps) {
+  const existsEvaluations = data.models_evaluated > 0;
+  const modelsEvaluated = data.models_evaluated;
+
   return (
     <div className="block rounded-lg border overflow-hidden border-slate-300 min-w-[400px] flex-1 font-heading relative">
       <Link href={`/workspace/work/evaluations/${data.id}`}>
@@ -46,15 +54,22 @@ export function EvaluationCard({
         </div>
 
         <div className="px-4 py-2 flex items-center gap-1 border-t border-slate-300">
-          <CircleCheck size={16} className="text-green-700" />
+          <ShowConditional
+            condition={existsEvaluations}
+            then={<CircleCheck size={16} className="text-green-700" />}
+            otherwise={<CircleMinus size={14} className="text-slate-600" />}
+          />
+
           <p className="font-heading -tracking-wider font-medium text-sm text-slate-800">
-            {data.models_evaluated} Modelo avaliado
+            {modelsEvaluated} {""}
+            <Show when={modelsEvaluated === 1}>Modelo avalidado</Show>
+            <Show when={modelsEvaluated === 0 || modelsEvaluated > 1}>Modelos avalidados</Show>
           </p>
         </div>
       </Link>
-      
+
       <Suspense>
-        <EvaluationCardOptions evaluationId={data.id}/>
+        <EvaluationCardOptions evaluationId={data.id} />
       </Suspense>
     </div>
   );
