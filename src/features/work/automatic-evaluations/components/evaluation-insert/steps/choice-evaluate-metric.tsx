@@ -1,7 +1,15 @@
 "use client";
 
+import { DialogClose } from "@radix-ui/react-dialog";
+import clsx from "clsx";
+import { Info } from "lucide-react";
+import { Controller, useFormContext } from "react-hook-form";
+import { useWizard } from "react-use-wizard";
+
+import { DialogSection } from "@/components/dialog/dialog-section";
 import { Button } from "@/components/ui/button";
 import { Divider } from "@/components/ui/divider";
+import { ErrorField } from "@/components/ui/error-field";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -10,15 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { DialogClose } from "@radix-ui/react-dialog";
-import { FileSpreadsheet, Info } from "lucide-react";
-import { Controller, useFormContext } from "react-hook-form";
-import { useWizard } from "react-use-wizard";
-
 import { EvaluationInsertData } from "@/features/work/automatic-evaluations/components/evaluation-insert/evaluation-insert-form";
-import { ErrorField } from "@/components/ui/error-field";
-import clsx from "clsx";
 
 type ChoiceEvaluateMetricData = Pick<
   EvaluationInsertData,
@@ -56,23 +56,12 @@ export function ChoiceEvaluateMetric({ isLoading }: ChoiceEvaluateMetricProps) {
   return (
     <div className="flex-1 flex flex-col justify-between">
       <div className="space-y-7">
-        <div className="flex items-center justify-between mb-7">
-          <div className="flex items-center gap-2">
-            <div className="size-8 bg-brand-700 rounded-full flex items-center justify-center">
-              <FileSpreadsheet className="text-white" size={16} />
-            </div>
-
-            <div className="">
-              <h2 className="text-slate-800 font-heading font-medium -tracking-wider">
-                Escolha a métrica de avaliação
-              </h2>
-              <p className="text-slate-600 font-body font-medium text-sm">
-                Escolha a métrica de avalição automática no qual o modelo vai
-                ser avaliado.
-              </p>
-            </div>
-          </div>
-        </div>
+        <DialogSection.Content>
+          <DialogSection.Title>Escolha a métrica de avaliação</DialogSection.Title>
+          <DialogSection.Description>
+            Defina o modelo que será avaliado nessa tarefa.
+          </DialogSection.Description>
+        </DialogSection.Content>
 
         <div className="bg-slate-100 p-4 rounded-lg space-y-1">
           <div className="flex items-center gap-1">

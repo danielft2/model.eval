@@ -1,4 +1,3 @@
-import { FileSpreadsheet } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { useWizard } from "react-use-wizard";
 
@@ -7,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { EvaluationInsertData } from "@/features/work/automatic-evaluations/schemes/evalution-insert";
 import { ErrorField } from "@/components/ui/error-field";
+import { DialogSection } from "@/components/dialog/dialog-section";
 
 type ModelDGConfigProps = {
   onFinish: () => void;
@@ -39,22 +39,13 @@ export function ModelDGConfig({ onFinish, isLoading }: ModelDGConfigProps) {
   return (
     <div className="flex-1 flex flex-col justify-between">
       <div className="space-y-7">
-        <div className="flex items-center justify-between mb-7">
-          <div className="flex items-center gap-2">
-            <div className="size-8 bg-brand-700 rounded-full flex items-center justify-center">
-              <FileSpreadsheet className="text-white" size={16} />
-            </div>
-
-            <div className="">
-              <h2 className="text-slate-800 font-heading font-medium -tracking-wider">
-                Tarefa de Geração de Distratores
-              </h2>
-              <p className="text-slate-600 font-body font-medium text-sm">
-                Defina o modelo que será avaliado nessa tarefa.
-              </p>
-            </div>
-          </div>
-        </div>
+        <DialogSection.Content>
+          <DialogSection.Title>Tarefa de Geração de Distratores</DialogSection.Title>
+          <DialogSection.Description>
+            Escolha a métrica de avaliação automática no qual o modelo vai ser
+            avaliado.
+          </DialogSection.Description>
+        </DialogSection.Content>
 
         <form className="space-y-4">
           <div className="space-y-1 flex-grow">

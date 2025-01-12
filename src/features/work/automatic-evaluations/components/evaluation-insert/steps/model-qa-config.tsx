@@ -1,4 +1,3 @@
-import { FileSpreadsheet } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { useWizard } from "react-use-wizard";
 
@@ -7,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { EvaluationInsertData } from "@/features/work/automatic-evaluations/schemes/evalution-insert";
 import { ErrorField } from "@/components/ui/error-field";
+import { DialogSection } from "@/components/dialog/dialog-section";
 
 export function ModelQAConfig() {
   const { previousStep, nextStep } = useWizard();
@@ -16,14 +16,14 @@ export function ModelQAConfig() {
     setValue,
     getValues,
     trigger,
-    formState: { errors }
+    formState: { errors },
   } = useFormContext<EvaluationInsertData>();
 
   async function handleNextStep() {
     const isValid = await trigger(["model_qa"]);
-    if (!isValid) return; 
+    if (!isValid) return;
 
-    const data = getValues()
+    const data = getValues();
     setValue("model_qa", data.model_qa);
     nextStep();
   }
@@ -34,22 +34,14 @@ export function ModelQAConfig() {
   return (
     <div className="flex-1 flex flex-col justify-between">
       <div className="space-y-7">
-        <div className="flex items-center justify-between mb-7">
-          <div className="flex items-center gap-2">
-            <div className="size-8 bg-brand-700 rounded-full flex items-center justify-center">
-              <FileSpreadsheet className="text-white" size={16} />
-            </div>
-
-            <div className="">
-              <h2 className="text-slate-800 font-heading font-medium -tracking-wider">
-                Tarefa de Resposta a Pergunta
-              </h2>
-              <p className="text-slate-600 font-body font-medium text-sm">
-                Defina o modelo que será avaliado nessa tarefa.
-              </p>
-            </div>
-          </div>
-        </div>
+        <DialogSection.Content>
+          <DialogSection.Title>
+            Tarefa de Resposta a Pergunta
+          </DialogSection.Title>
+          <DialogSection.Description>
+            Defina o modelo que será avaliado nessa tarefa.
+          </DialogSection.Description>
+        </DialogSection.Content>
 
         <form className="space-y-4">
           <div className="space-y-1 flex-grow">
@@ -65,7 +57,7 @@ export function ModelQAConfig() {
               className={modelIdErrorMessage && "invalid-field"}
               {...register("model_qa.model_title_id")}
             />
-            <ErrorField message={modelIdErrorMessage}/>
+            <ErrorField message={modelIdErrorMessage} />
           </div>
 
           <div className="space-y-1 flex-grow">
@@ -82,13 +74,13 @@ export function ModelQAConfig() {
               className={modelIdErrorMessage && "invalid-field"}
               {...register("model_qa.input_text")}
             />
-            <ErrorField message={inputTextErrorMessage}/>
+            <ErrorField message={inputTextErrorMessage} />
           </div>
         </form>
       </div>
 
       <div className="mt-[25px] flex gap-2 justify-end">
-      <Button
+        <Button
           variant="secondary"
           className="min-w-[100px]"
           onClick={() => previousStep()}
