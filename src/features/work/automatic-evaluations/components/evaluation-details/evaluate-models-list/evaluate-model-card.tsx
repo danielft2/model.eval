@@ -6,14 +6,18 @@ import { EvaluatedModel } from "@/features/work/automatic-evaluations/types/eval
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { Show } from "@/components/ui/show";
 
 type EvaluateModelCardProps = {
   model: EvaluatedModel;
-  isAvaliableForEvaluation: boolean
+  isAvaliableForEvaluation: boolean;
 };
 
-export function EvaluateModelCard({ model, isAvaliableForEvaluation }: EvaluateModelCardProps) {
-  const params = useParams<{ evaluation_id: string }>()
+export function EvaluateModelCard({
+  model,
+  isAvaliableForEvaluation,
+}: EvaluateModelCardProps) {
+  const params = useParams<{ evaluation_id: string }>();
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [metricResult, setMetricResult] = useState(model.metric_result);
 
@@ -22,8 +26,11 @@ export function EvaluateModelCard({ model, isAvaliableForEvaluation }: EvaluateM
       setIsEvaluating(true);
       const response = await fetch("/api/evaluate", {
         method: "PUT",
-        body: JSON.stringify({ modelId: model.id, evaluationId: params.evaluation_id })
-      })
+        body: JSON.stringify({
+          modelId: model.id,
+          evaluationId: params.evaluation_id,
+        }),
+      });
 
       const data = await response.json();
       setMetricResult(data.data?.perplexity);
@@ -49,7 +56,9 @@ export function EvaluateModelCard({ model, isAvaliableForEvaluation }: EvaluateM
           disabled={isEvaluating || !isAvaliableForEvaluation}
         >
           Avaliar modelo
-          { isEvaluating && <LoaderCircle className="animate-spin"/> }
+          <Show when={isEvaluating}>
+            <LoaderCircle className="animate-spin" />
+          </Show>
         </Button>
       </div>
 
