@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { EvaluationInsertModal } from "@/features/work/automatic-evaluations/components/evaluation-insert";
+import { HumanEvaluationInsertModal } from "../../human-evaluations/components/evaluation-insert";
 
 export function NewEvaluationButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +32,8 @@ export function NewEvaluationButton() {
         Nova avaliação
       </Button>
 
-      <EvaluationInsertModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      {/* <EvaluationInsertModal isOpen={isOpen} setIsOpen={setIsOpen} /> */}
+      <HumanEvaluationInsertModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
   );
 }

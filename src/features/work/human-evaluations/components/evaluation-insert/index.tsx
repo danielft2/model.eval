@@ -1,8 +1,9 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { Suspense } from "react";
-
+import { DialogSection } from "@/components/dialog/dialog-section";
 import { DialogTitle } from "@/components/dialog/dialog-title";
-import { EvaluationInsertForm } from "./evaluation-insert-form";
+
+import { HumanEvaluationInsertForm } from "./evaluation-insert-form";
 
 type EvaluationModalProps = {
   isOpen: boolean;
@@ -10,14 +11,10 @@ type EvaluationModalProps = {
   evaluationId?: number;
 };
 
-export function EvaluationInsertModal({
+export function HumanEvaluationInsertModal({
   isOpen,
   setIsOpen,
-  evaluationId,
 }: EvaluationModalProps) {
-  if (evaluationId) {
-  }
-
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Portal>
@@ -26,9 +23,18 @@ export function EvaluationInsertModal({
           className="fixed left-1/2 top-1/2 min-h-[70vh] w-[90vw] max-w-[1000px] -translate-x-1/2 
           -translate-y-1/2 rounded-lg bg-white p-[25px] shadow-sm focus:outline-none data-[state=open]:animate-contentShow flex flex-col"
         >
-          <DialogTitle>Avaliação Automática</DialogTitle>
+          <DialogTitle>Avaliação Humana</DialogTitle>
+          <DialogSection.Content>
+            <DialogSection.Title>
+              Configure a avaliação humana
+            </DialogSection.Title>
+            <DialogSection.Description>
+              Escolha a métrica de avaliação automática no qual o modelo vai ser
+              avaliado.
+            </DialogSection.Description>
+          </DialogSection.Content>
           <Suspense>
-            <EvaluationInsertForm onClose={() => setIsOpen(false)} />
+            <HumanEvaluationInsertForm onClose={() => setIsOpen(false)} />
           </Suspense>
         </Dialog.Content>
       </Dialog.Portal>
