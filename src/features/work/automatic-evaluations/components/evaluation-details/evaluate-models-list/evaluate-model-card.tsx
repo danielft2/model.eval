@@ -5,6 +5,7 @@ import { CircleCheck, LoaderCircle } from "lucide-react";
 import { EvaluatedModel } from "@/features/work/automatic-evaluations/types/evaluated-model";
 import { useState } from "react";
 import { useParams } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 
 type EvaluateModelCardProps = {
   model: EvaluatedModel;
@@ -35,12 +36,7 @@ export function EvaluateModelCard({ model, isAvaliableForEvaluation }: EvaluateM
     <div className="block rounded-lg border overflow-hidden border-slate-300 min-w-[400px] flex-1 font-heading relative">
       <div className="bg-slate-100 p-4 flex items-end justify-between">
         <div className="space-y-2" style={{ maxWidth: "calc(100% - 150px)" }}>
-          <span
-            className="inline-block px-2 py-0.5 text-xs font-heading -tracking-wider font-medium bg-green-100 
-            text-green-800 border border-green-300 rounded-md"
-          >
-            {model.task_name || "-"}
-          </span>
+          <Badge variant="green">{model.task_name || "-"}</Badge>
           <h1 className="font-heading -tracking-wider text-base font-medium max-w-full truncate">
             {model.model_title_id || "-"}
           </h1>
