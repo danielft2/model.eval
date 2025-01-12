@@ -19,7 +19,9 @@ const modelConfigScheme = z
 
 export const evaluationInsertScheme = z.object({
   title: z.string().nonempty("O título é obrigatório."),
-  metric_id: z.string().nonempty("A métrica é obrigatória."),
+  metric_id: z
+    .string()
+    .min(1, "A métrica é obrigatória."),
   model_dg: modelConfigScheme,
   model_qg: modelConfigScheme,
   model_qa: modelConfigScheme,
