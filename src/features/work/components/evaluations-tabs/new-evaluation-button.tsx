@@ -5,8 +5,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { EvaluationInsertModal } from "@/features/work/automatic-evaluations/components/evaluation-insert";
-import { HumanEvaluationInsertModal } from "../../human-evaluations/components/evaluation-insert";
+
+import { ChoiceEvaluationTypeModal } from "../choice-evaluation-type-modal";
 
 export function NewEvaluationButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +19,7 @@ export function NewEvaluationButton() {
       const params = new URLSearchParams(searchParams.toString());
       params.delete("edit");
       router.push(`${pathname}?${params.toString()}`);
-      setTimeout(() => setIsOpen(true), 100)
+      setTimeout(() => setIsOpen(true), 100);
     } else {
       setIsOpen(true);
     }
@@ -32,8 +32,7 @@ export function NewEvaluationButton() {
         Nova avaliação
       </Button>
 
-      {/* <EvaluationInsertModal isOpen={isOpen} setIsOpen={setIsOpen} /> */}
-      <HumanEvaluationInsertModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <ChoiceEvaluationTypeModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
   );
 }
