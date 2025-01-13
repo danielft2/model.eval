@@ -9,12 +9,18 @@ import { REVALIDATE_TAGS } from "@/constants/revalidate-tags";
 import { HumanEvaluationInsertDto } from "@/features/work/human-evaluations/http/dtos/human-evaluation-insert";
 
 export async function insertHumanEvaluationAction(
-  data: HumanEvaluationInsertDto
+  data: HumanEvaluationInsertDto,
+  evaluationId?: string | null 
 ): Promise<ResponseApp<string, string>> {
   const token = await retrieveAccessToken();
+  const method = evaluationId ? "PUT" : "POST";
+  const endpoint = evaluationId
+    ? `/human-evaluation/${evaluationId}`
+    : "/human-evaluation";
+
   const response = await fetchClient.request({
-    endpoint: "/human-evaluation",
-    method: "POST",
+    endpoint,
+    method,
     body: data,
     options: {
       headers: {

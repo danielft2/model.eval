@@ -1,6 +1,8 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -12,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { insertHumanEvaluationAction } from "@/features/work/human-evaluations/actions/insert-evaluation";
+import { retrieveHumanEvaluationDetailsAction } from "@/features/work/human-evaluations/actions/retrieve-evaluation-details";
 import { humanEvaluationInsertScheme } from "@/features/work/human-evaluations/schemes/human-evaluation-insert";
 import { cn } from "@/lib/utils";
 import { useLoadingStore } from "@/store/loading-store";
@@ -23,8 +26,12 @@ type HumanEvaluationInsertFormProps = {
   onClose: () => void;
 };
 
-export function HumanEvaluationInsertForm({ onClose }: HumanEvaluationInsertFormProps) {
+export function HumanEvaluationInsertForm({
+  onClose,
+}: HumanEvaluationInsertFormProps) {
   const { isLoading, changeLoadingState } = useLoadingStore();
+  const searchParams = useSearchParams();
+  const editEvaluationId = searchParams.get("edit");
 
   const humanEvaluationForm = useForm<HumanEvaluationInsertData>({
     resolver: zodResolver(humanEvaluationInsertScheme),
@@ -39,29 +46,73 @@ export function HumanEvaluationInsertForm({ onClose }: HumanEvaluationInsertForm
   });
 
   async function handleSubmitData(data: HumanEvaluationInsertData) {
-    const shouldUseMetrics = data.use_relevance || data.use_answerability || data.use_utility;
+    const shouldUseMetrics =
+      data.use_relevance || data.use_answerability || data.use_utility;
     if (!shouldUseMetrics) {
       toast.error("Selecione pelo menos uma métrica de avaliação.");
       return;
-    } 
+    }
 
     try {
       changeLoadingState(true);
-      const response = await insertHumanEvaluationAction(data);
+      const response = await insertHumanEvaluationAction(
+        {
+          ...data,
+          num_questions_of_evaluator: parseInt(data.num_questions_of_evaluator),
+        },
+        editEvaluationId
+      );
 
       if (response.data) {
         toast.success(response.data);
         onClose();
-      } else if (response.error) { 
-        toast.error(response.error)
-      };
+      } else if (response.error) {
+        toast.error(response.error);
+      }
     } finally {
       changeLoadingState(false);
     }
   }
 
-  const { handleSubmit, register, formState: { errors } } = humanEvaluationForm;
-  
+  const retrieveDetails = useCallback(
+    async (evaluationId: string) => {
+      try {
+        changeLoadingState(true);
+        const response = await retrieveHumanEvaluationDetailsAction(
+          evaluationId
+        );
+        if (response.data) {
+          const data = response.data;
+
+          humanEvaluationForm.reset({
+            title: data.title,
+            instructions: data.instructions,
+            num_questions_of_evaluator:
+              data.num_questions_of_evaluator.toString(),
+            use_relevance: data.use_relevance,
+            use_answerability: data.use_answerability,
+            use_utility: data.use_utility,
+          });
+        }
+      } finally {
+        changeLoadingState(false);
+      }
+    },
+    [humanEvaluationForm, changeLoadingState]
+  );
+
+  useEffect(() => {
+    if (editEvaluationId) {
+      retrieveDetails(editEvaluationId);
+    }
+  }, [editEvaluationId, retrieveDetails]);
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = humanEvaluationForm;
+
   const titleErrorMessage = errors.title?.message;
   const numQuestionsErrorMessage = errors.num_questions_of_evaluator?.message;
   const instructionsErrorMessage = errors.instructions?.message;
@@ -85,7 +136,7 @@ export function HumanEvaluationInsertForm({ onClose }: HumanEvaluationInsertForm
                   className={titleErrorMessage && "invalid-field"}
                   {...register("title")}
                 />
-                <ErrorField message={titleErrorMessage}/>
+                <ErrorField message={titleErrorMessage} />
               </div>
 
               <div className="space-y-1 flex-1">
@@ -101,7 +152,7 @@ export function HumanEvaluationInsertForm({ onClose }: HumanEvaluationInsertForm
                   className={numQuestionsErrorMessage && "invalid-field"}
                   {...register("num_questions_of_evaluator")}
                 />
-                <ErrorField message={numQuestionsErrorMessage}/>
+                <ErrorField message={numQuestionsErrorMessage} />
               </div>
             </div>
 
@@ -115,10 +166,13 @@ export function HumanEvaluationInsertForm({ onClose }: HumanEvaluationInsertForm
               <Textarea
                 id="instructions"
                 placeholder="Texto inicial apresentado aos avaliadores"
-                className={cn("max-h-[150px]", instructionsErrorMessage && "invalid-field")}
+                className={cn(
+                  "max-h-[150px]",
+                  instructionsErrorMessage && "invalid-field"
+                )}
                 {...register("instructions")}
               />
-              <ErrorField message={instructionsErrorMessage}/>
+              <ErrorField message={instructionsErrorMessage} />
             </div>
           </div>
 
