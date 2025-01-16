@@ -1,5 +1,6 @@
 'use client'
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -10,10 +11,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { EvaluationInsertModal } from "@/features/work/automatic-evaluations/components/evaluation-insert";
 import { deleteHumanEvaluationAction } from "@/features/work/human-evaluations/actions/delete-evaluation";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useLoadingStore } from "@/store/loading-store";
+import { HumanEvaluationInsertModal } from "../evaluation-insert";
 
 type AutomaticEvaluationCardOptionsProps = {
   evaluationId: string
@@ -69,7 +69,7 @@ export function HumanEvaluationCardOptions({ evaluationId }: AutomaticEvaluation
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <EvaluationInsertModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <HumanEvaluationInsertModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
   );
 }
