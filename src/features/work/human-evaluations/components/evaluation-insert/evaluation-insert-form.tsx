@@ -84,14 +84,9 @@ export function HumanEvaluationInsertForm({
         if (response.data) {
           const data = response.data;
 
-          humanEvaluationForm.reset({
-            title: data.title,
-            instructions: data.instructions,
-            num_questions_of_evaluator:
-              data.num_questions_of_evaluator.toString(),
-            use_relevance: data.use_relevance,
-            use_answerability: data.use_answerability,
-            use_utility: data.use_utility,
+          humanEvaluationForm.reset({ 
+            ...response.data,
+            num_questions_of_evaluator: data.num_questions_of_evaluator.toString(),
           });
         }
       } finally {
