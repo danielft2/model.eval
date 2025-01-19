@@ -1,6 +1,6 @@
 import { retrieveAccessToken } from '@/actions/retrieve-access-token';
-import { verifyResponse } from '@/actions/verify-response';
 import { fetchClient } from '@/api/fetch-client';
+import { verifyResponse } from '@/api/verify-response';
 import { NextResponse } from 'next/server';
 
 type Body = {

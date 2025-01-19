@@ -2,11 +2,11 @@
 import { revalidateTag } from "next/cache";
 
 import { retrieveAccessToken } from "@/actions/retrieve-access-token";
-import { verifyResponse } from "@/actions/verify-response";
 import { fetchClient } from "@/api/fetch-client";
 import { ResponseApp } from "@/api/response";
 import { REVALIDATE_TAGS } from "@/constants/revalidate-tags";
 import { HumanEvaluationInsertDto } from "@/features/work/human-evaluations/http/dtos/human-evaluation-insert";
+import { verifyResponse } from "@/api/verify-response";
 
 export async function insertHumanEvaluationAction(
   data: HumanEvaluationInsertDto,

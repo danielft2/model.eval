@@ -2,10 +2,10 @@
 
 import { revalidateTag } from "next/cache";
 import { retrieveAccessToken } from "@/actions/retrieve-access-token";
-import { verifyResponse } from "@/actions/verify-response";
 import { fetchClient } from "@/api/fetch-client";
 import { ResponseApp } from "@/api/response";
 import { REVALIDATE_TAGS } from "@/constants/revalidate-tags";
+import { verifyResponse } from "@/api/verify-response";
 
 export async function deleteHumanEvaluationAction(evaluationId: string): Promise<ResponseApp<string, string>> {
   const token = await retrieveAccessToken();
