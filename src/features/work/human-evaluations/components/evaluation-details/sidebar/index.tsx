@@ -40,10 +40,8 @@ export function Sidebar() {
   }, [retrieveQuestions]);
 
   return (
-    <ScrollArea style={{ height: "calc(100vh - 180px)" }}>
-      <aside
-        className="w-64 pr-5 py-6 border-r h-full border-slate-300 space-y-4"
-      >
+    <ScrollArea className="min-w-[256px]" style={{ height: "calc(100vh - 180px)" }}>
+      <aside className="pr-5 py-6 border-r h-full border-slate-300 space-y-4">
         <SidebarItem
           valueItem="overview"
           activeItem={!pathName.includes("question-overview")}
@@ -53,7 +51,7 @@ export function Sidebar() {
           Informações Gerais
         </SidebarItem>
 
-        <div className="space-y-1">
+        <div className="space-y-1 h-full">
           <span className="font-heading text-xs font-medium text-slate-600">
             DESCRITORES
           </span>
@@ -66,7 +64,7 @@ export function Sidebar() {
                   onClickItem={handleSelecteItem}
                 >
                   <CircleHelp />
-                  Questão {index} {question.descriptor_code}
+                  Questão {index + 1} {question.descriptor_code}
                 </SidebarItem>
               </li>
             ))}

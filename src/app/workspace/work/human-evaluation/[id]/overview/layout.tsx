@@ -1,5 +1,5 @@
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sidebar } from "@/features/work/human-evaluations/components/evaluation-details/sidebar";
-import { Suspense } from "react";
 
 export default function HumanEvaluationLayout({
   children,
@@ -8,10 +8,10 @@ export default function HumanEvaluationLayout({
 }>) {
   return (
     <section className="flex gap-5 h-full">
-      <Suspense fallback={"aa"}>
-        <Sidebar />
-      </Suspense>
-      {children}
+      <Sidebar />
+      <ScrollArea className="flex-1 pt-6" style={{ height: "calc(100vh - 188px)" }}>
+        {children}
+      </ScrollArea>
     </section>
   );
 }
