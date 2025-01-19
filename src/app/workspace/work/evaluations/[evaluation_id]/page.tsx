@@ -8,7 +8,7 @@ type Params = {
 };
 
 export default async function EvaluationDetailsPage({ params }: {
-  params: Params;
+  params: Promise<Params>;
 }) {
   const { evaluation_id } = await params;
 
