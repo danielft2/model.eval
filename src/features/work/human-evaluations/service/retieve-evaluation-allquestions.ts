@@ -8,7 +8,7 @@ import { HumanEvaluationAllQuestionsOverview } from "../http/responses/human-eva
 
 export async function retrieveHumanEvaluationAllQuestionsOverview(
   evaluationId: string,
-  descriptor: string = "0" | undefined
+  descriptor: string = "0"
 ): Promise<ResponseApp<HumanEvaluationAllQuestionsOverview, string>> {
   const token = await retrieveAccessToken();
   const endpoint =
