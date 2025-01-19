@@ -1,9 +1,9 @@
 import { retrieveAccessToken } from "@/actions/retrieve-access-token";
-import { verifyResponse } from "@/actions/verify-response";
 import { fetchClient } from "@/api/fetch-client";
 import { ResponseApp } from "@/api/response";
 import { AutomaticEvaluationResponse } from "../http/responses/automatic-evaluation-response";
 import { REVALIDATE_TAGS } from "@/constants/revalidate-tags";
+import { verifyResponse } from "@/api/verify-response";
 
 export async function retrieveEvaluations(): Promise<
   ResponseApp<AutomaticEvaluationResponse[], string>

@@ -27,8 +27,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
-      <body className={`${workSans.variable} ${raleway.variable} antialiased`}>
+    <html lang="pt-BR" suppressHydrationWarning>
+      <body className={`${workSans.variable} ${raleway.variable} antialiased overflow-hidden`}>
         {children}
         <Toaster
           className="-tracking-wider font-heading"

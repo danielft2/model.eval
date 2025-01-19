@@ -3,12 +3,13 @@ import { ResponseHttp } from "@/infra/http/response";
 import { AppError } from "./app-error";
 
 export class AppFetch implements HttpClient {
-  private baseUrl = process.env.API_BASE_URL;
+  private baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   public async request<T>(config: RequestConfig): Promise<ResponseHttp<T>> {
     const { endpoint, method } = config;
 
     const url = `${this.baseUrl}${endpoint}`;
+    console.log(this.baseUrl)
     const options_req = this.buildRequestConfig(method, config);
 
     try {

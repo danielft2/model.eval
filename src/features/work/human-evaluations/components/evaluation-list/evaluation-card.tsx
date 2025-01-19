@@ -18,7 +18,7 @@ export function HumanEvaluationCard({ data }: HumanEvaluationCardProps) {
 
   return (
     <div className="block rounded-lg border overflow-hidden border-slate-300 min-w-[400px] flex-1 font-heading relative">
-      <Link href={`/workspace/work/evaluations/`}>
+      <Link href={`/workspace/work/human-evaluation/${data.id}/overview`}>
         <div className="bg-slate-100 space-y-1 p-4">
           <h1 className="font-heading -tracking-wider text-base font-medium">
             {data.title}

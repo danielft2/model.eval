@@ -1,16 +1,18 @@
+'use server'
+
 import { retrieveAccessToken } from "@/actions/retrieve-access-token";
 import { fetchClient } from "@/api/fetch-client";
 import { ResponseApp } from "@/api/response";
-import { HumanEvaluationDetails } from "../http/responses/human-evaluation-details";
+import { HumanEvaluationOverview } from "../http/responses/human-evaluation-overview";
 import { verifyResponse } from "@/api/verify-response";
 
-export async function retrieveHumanEvaluation(
+export async function retrieveHumanEvaluationOverview(
   evaluationId: string
-): Promise<ResponseApp<HumanEvaluationDetails, string>> {
+): Promise<ResponseApp<HumanEvaluationOverview, string>> {
   const token = await retrieveAccessToken();
-  const response = await fetchClient.request<HumanEvaluationDetails>({
+  const response = await fetchClient.request<HumanEvaluationOverview>({
     method: "GET",
-    endpoint: `/human-evaluation/${evaluationId}`,
+    endpoint: `/human-evaluation/overview/${evaluationId}`,
     options: {
       headers: {
         Authorization: `Bearer ${token}`,

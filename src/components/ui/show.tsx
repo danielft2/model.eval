@@ -4,5 +4,6 @@ type ShowProps = {
 }
 
 export function Show({ when, children }: ShowProps) {
-  return when && children;
+  if (!when) return null;
+  return children;
 }
