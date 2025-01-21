@@ -1,3 +1,5 @@
+import { HumanEvaluationStatus } from "@/types/human-evaluation-status";
+
 export type HumanEvaluationDetails = {
   id: string;
   user_id: number;
@@ -7,5 +9,5 @@ export type HumanEvaluationDetails = {
   use_relevance: boolean;
   use_answerability: boolean;
   use_utility: boolean;
-  status_id: number;
+  status: HumanEvaluationStatus;
 };
