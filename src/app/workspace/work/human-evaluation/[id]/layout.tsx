@@ -9,7 +9,7 @@ export default function HumanEvaluationLayout({
   return (
     <div className="h-full flex flex-col">
       <HumanEvaluationDetailsHeader />
-      <Divider />
+      <Divider className="mt-6" />
       <main className="flex-1 gap-5">
         {children}
       </main>

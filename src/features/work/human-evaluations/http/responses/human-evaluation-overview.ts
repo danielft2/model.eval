@@ -1,4 +1,4 @@
-import { HumanEvaluationDetails } from "./human-evaluation-details";
+import { HumanEvaluationDetails } from "@/features/work/human-evaluations/http/responses/human-evaluation-details";
 
 export type HumanEvaluationOverview = {
   evaluation: HumanEvaluationDetails;

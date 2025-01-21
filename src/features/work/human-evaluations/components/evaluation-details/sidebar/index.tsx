@@ -1,21 +1,14 @@
 "use client";
 
 import { CircleHelp, Database } from "lucide-react";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ImportedQuestion } from "@/features/work/human-evaluations/http/responses/human-evaluation-overview";
-import { retrieveHumanEvaluationOverview } from "@/features/work/human-evaluations/service/retrieve-evaluation-overview";
-import { useHumanEvaluationQuestionsStore } from "@/store/human-evaluation-questions";
-
+import { useHumanEvaluationDetailsStore } from "@/store/human-evaluation-details";
 import { SidebarItem } from "./sidebar-item";
 
 export function Sidebar() {
-  const [questions, setQuestions] = useState<ImportedQuestion[]>([]);
-  const setQuestionStore = useHumanEvaluationQuestionsStore(state => state.setQuestions)
-  
-  const { id } = useParams<{ id: string }>();
+  const questions = useHumanEvaluationDetailsStore(state => state.questions);
   const router = useRouter();
   const pathName = usePathname();
   const basePath = pathName.split("/question-overview")[0];
@@ -25,23 +18,9 @@ export function Sidebar() {
     router.replace(newPath);
   }
 
-  const retrieveQuestions = useCallback(async () => {
-    try {
-      const response = await retrieveHumanEvaluationOverview(id);
-      if (response.data) {
-        setQuestions(response.data.imported_questions);
-        setQuestionStore(response.data.imported_questions);
-      };
-    } finally {}
-  }, [id, setQuestionStore]);
-
-  useEffect(() => {
-    retrieveQuestions();
-  }, [retrieveQuestions]);
-
   return (
-    <ScrollArea className="min-w-[256px]" style={{ height: "calc(100vh - 180px)" }}>
-      <aside className="pr-5 py-6 border-r h-full border-slate-300 space-y-4">
+    <ScrollArea className="py-6">
+      <aside className="min-w-[256px] pr-5 border-r space-y-4 border-slate-300" style={{ height: "calc(100vh - 192px)" }}>
         <SidebarItem
           valueItem="overview"
           activeItem={!pathName.includes("question-overview")}
