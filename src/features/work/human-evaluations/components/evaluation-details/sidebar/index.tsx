@@ -19,8 +19,8 @@ export function Sidebar() {
   }
 
   return (
-    <ScrollArea className="py-6">
-      <aside className="min-w-[256px] pr-5 border-r space-y-4 border-slate-300" style={{ height: "calc(100vh - 192px)" }}>
+    <ScrollArea style={{ height: "calc(100vh - 200px)" }}>
+      <aside className="min-w-[256px] h-full py-6 pr-5 border-r space-y-4 border-slate-300" >
         <SidebarItem
           valueItem="overview"
           activeItem={!pathName.includes("question-overview")}
