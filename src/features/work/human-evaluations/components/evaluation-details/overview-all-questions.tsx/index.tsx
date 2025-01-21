@@ -7,9 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useHumanEvaluationQuestionsStore } from "@/store/human-evaluation-questions";
 import { Content } from "./content";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useHumanEvaluationDetailsStore } from "@/store/human-evaluation-details";
 
 export function OverviewAllQuestions() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export function OverviewAllQuestions() {
   const pathname = usePathname();
   const descriptorCode = searchParams.get('descriptor_code');
 
-  const questionsDecriptors = useHumanEvaluationQuestionsStore(
+  const questionsDecriptors = useHumanEvaluationDetailsStore(
     (state) => state.questions
   );
 

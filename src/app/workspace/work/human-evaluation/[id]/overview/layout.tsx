@@ -9,7 +9,7 @@ export default function HumanEvaluationLayout({
   return (
     <section className="flex gap-5 h-full">
       <Sidebar />
-      <ScrollArea className="flex-1 pt-6" style={{ height: "calc(100vh - 188px)" }}>
+      <ScrollArea className="flex-1 pt-6" style={{ height: "calc(100vh - 212px)" }}>
         {children}
       </ScrollArea>
     </section>
