@@ -23,7 +23,7 @@ export async function retrieveHumanEvaluationAllQuestionsOverview(
       options: {
         headers: {
           Authorization: `Bearer ${token}`,
-        },
+        }
       },
     });
 

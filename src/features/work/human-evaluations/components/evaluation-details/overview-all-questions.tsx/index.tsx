@@ -17,7 +17,7 @@ export function OverviewAllQuestions() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const descriptorCode = searchParams.get("descriptor_code");
+  const descriptorCode = searchParams.get("descriptor_code") ?? "0";
 
   const questionsDecriptors = useHumanEvaluationDetailsStore(
     (state) => state.questions
@@ -43,7 +43,8 @@ export function OverviewAllQuestions() {
   return (
     <div className="space-y-4">
       <Select
-        value={descriptorCode || "0"}
+        value={descriptorCode}
+        defaultValue="0"
         onValueChange={handleChangedDescriptor}
       >
         <SelectTrigger className="w-52">
@@ -58,7 +59,7 @@ export function OverviewAllQuestions() {
           ))}
         </SelectContent>
       </Select>
-      <Content />
+      <Content decriptorCode={descriptorCode} />
     </div>
   );
 }

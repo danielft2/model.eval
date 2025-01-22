@@ -1,57 +1,31 @@
 "use client";
-import { ArrowUpFromLine, Link2 } from "lucide-react";
+
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useCallback, useEffect, useOptimistic, useTransition } from "react";
+import {
+  useCallback,
+  useEffect,
+} from "react";
 
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Show } from "@/components/ui/show";
 import { retrieveHumanEvaluationOverview } from "@/features/work/human-evaluations/service/retrieve-evaluation-overview";
 import { useHumanEvaluationDetailsStore } from "@/store/human-evaluation-details";
-import { Show } from "@/components/ui/show";
-import { Badge } from "@/components/ui/badge";
-import { HumanEvaluationStatus } from "@/features/work/human-evaluations/types/evaluation-status";
-import { ShowConditional } from "@/components/ui/show-conditional";
-import { changeStatusAction } from "../../../actions/change-status";
-import { toast } from "sonner";
-import { Switch } from "@/components/ui/switch";
+
+import { EvaluationHeaderActions } from "./evaluation-header-actions";
 
 export function HumanEvaluationDetailsHeader() {
   const { id } = useParams<{ id: string }>();
-  
-  const setEvaluationDetails = useHumanEvaluationDetailsStore(
-    (state) => state.setDataOverview
-  );
 
-  const evaluationDetails = useHumanEvaluationDetailsStore(
-    (state) => state.evaluation
-  );
-
-  const isAvaliableEvaluation = evaluationDetails?.status.id === HumanEvaluationStatus.UNAVAILABLE;
-  const [optimisticAvaliable, setOptimisticAvaliable] = useOptimistic<boolean>(isAvaliableEvaluation);
-  const [isPending, startTransition] = useTransition()
+  const evaluationDetails = useHumanEvaluationDetailsStore((state) => state.evaluation);
+  const setEvaluationDetails = useHumanEvaluationDetailsStore((state) => state.setDataOverview);
 
   const retrieveQuestions = useCallback(async () => {
     try {
       const response = await retrieveHumanEvaluationOverview(id);
-      if (response.data) {
-        setEvaluationDetails(response.data);
-      };
-    } finally {
-    }
+      if (response.data) setEvaluationDetails(response.data);
+    } finally {}
   }, [id, setEvaluationDetails]);
-
-  const handleChangeStatus = async () => {
-    startTransition(async () => {
-      setOptimisticAvaliable(state => !state);
-      const response = await changeStatusAction(id);
-      if (response.data) {
-        toast.success("Status alterado com sucesso");
-        setEvaluationDetails({ evaluation: response.data });
-      } else {
-        toast.error(response.error);
-      }
-    })
-  }
 
   useEffect(() => {
     retrieveQuestions();
@@ -73,42 +47,21 @@ export function HumanEvaluationDetailsHeader() {
           </h1>
 
           <div className="flex gap-2 mt-2">
-            <Show when={evaluationDetails?.use_relevance ?? false}>
+            <Show when={!!evaluationDetails?.use_relevance}>
               <Badge variant="blue">Relevância</Badge>
             </Show>
 
-            <Show when={evaluationDetails?.use_answerability ?? false}>
+            <Show when={!!evaluationDetails?.use_answerability}>
               <Badge variant="violet">Respondibilidade</Badge>
             </Show>
 
-            <Show when={evaluationDetails?.use_utility ?? false}>
+            <Show when={!!evaluationDetails?.use_utility}>
               <Badge variant="green">Utilidade</Badge>
             </Show>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium font-heading -tracking-wider text-slate-700">Aceitando respostas</span>
-            <Switch checked={optimisticAvaliable} onCheckedChange={handleChangeStatus} />
-          </div>
-
-          <ShowConditional
-            condition={!isAvaliableEvaluation}
-            then={
-              <Button variant="secondary" disabled={isPending} className="w-36">
-                <ArrowUpFromLine />
-                Questões
-              </Button>
-            }
-            otherwise={
-              <Button disabled={isPending} className="w-36">
-                <Link2 />
-                Compartilhar
-              </Button>
-            }
-          />
-        </div>
+        <EvaluationHeaderActions evaluationDetails={evaluationDetails} />
       </header>
     </>
   );
