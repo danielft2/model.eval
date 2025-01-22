@@ -1,19 +1,22 @@
-import { Show } from "@/components/ui/show";
-import { formatRechartData } from "@/lib/rechart";
 import { CircleCheck, CircleHelp } from "lucide-react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+
+import { Show } from "@/components/ui/show";
+import { formatRechartData } from "@/lib/rechart";
 import { HumanEvaluationAllQuestionsOverview } from "../../../http/responses/human-evaluation-allquestions-overview";
 import { retrieveHumanEvaluationAllQuestionsOverview } from "../../../service/retieve-evaluation-allquestions";
 import { PieChartMetric } from "../metrics-results/pie-chart-metric";
 import { OverviewCard } from "../overview-card";
 
-export function Content() {
-  const [data, setData] = useState<HumanEvaluationAllQuestionsOverview>();
+type OverviewAllQuestionsProps = {
+  decriptorCode: string;
+}
 
+export function Content({ decriptorCode }: OverviewAllQuestionsProps) {
+  const [data, setData] = useState<HumanEvaluationAllQuestionsOverview>();
   const { id } = useParams<{ id: string }>();
-  const decriptorCode = useSearchParams().get("descriptor_code") ?? "0";
 
   useEffect(() => {
     (async () => {
