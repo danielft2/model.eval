@@ -26,6 +26,11 @@ export function EvaluationHeaderActions({
   const setEvaluationDetails = useHumanEvaluationDetailsStore(
     (state) => state.setDataOverview
   );
+  
+  const evaluationQuestions = useHumanEvaluationDetailsStore(
+    (state) => state.questions
+  )
+
   const isAvaliableEvaluation =
     evaluationDetails?.status.id === HumanEvaluationStatus.AVALIABLE;
 
@@ -33,6 +38,8 @@ export function EvaluationHeaderActions({
     isAvaliableEvaluation
   );
   const [isPending, startTransition] = useTransition();
+
+  const isAvaliableToImportQuestions = !isAvaliableEvaluation && evaluationQuestions.length === 0;
 
   const handleChangeStatus = async () => {
     startTransition(async () => {
@@ -66,7 +73,7 @@ export function EvaluationHeaderActions({
         />
       </div>
 
-      <Show when={!isAvaliableEvaluation}>
+      <Show when={isAvaliableToImportQuestions}>
         <EvaluationHeaderImportQuestions evaluationId={id} />
       </Show>
 
