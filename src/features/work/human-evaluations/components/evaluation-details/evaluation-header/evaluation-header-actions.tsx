@@ -4,9 +4,10 @@ import { useOptimistic, useTransition } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { ShowConditional } from "@/components/ui/show-conditional";
+import { Show } from "@/components/ui/show";
 import { Switch } from "@/components/ui/switch";
 import { changeStatusAction } from "@/features/work/human-evaluations/actions/change-status";
+import { createSharedLink } from "@/features/work/human-evaluations/actions/create-shared-link";
 import { HumanEvaluationDetails } from "@/features/work/human-evaluations/http/responses/human-evaluation-details";
 import { HumanEvaluationStatus } from "@/features/work/human-evaluations/types/evaluation-status";
 import { useHumanEvaluationDetailsStore } from "@/store/human-evaluation-details";
@@ -17,13 +18,28 @@ type EvaluationHeaderActionsProps = {
   evaluationDetails: HumanEvaluationDetails | null;
 };
 
-export function EvaluationHeaderActions({ evaluationDetails }: EvaluationHeaderActionsProps) {
+export function EvaluationHeaderActions({
+  evaluationDetails,
+}: EvaluationHeaderActionsProps) {
   const { id } = useParams<{ id: string }>();
-  const setEvaluationDetails = useHumanEvaluationDetailsStore((state) => state.setDataOverview);
-  const isAvaliableEvaluation = evaluationDetails?.status.id === HumanEvaluationStatus.AVALIABLE;
 
-  const [optimisticAvaliable, setOptimisticAvaliable] = useOptimistic<boolean>(isAvaliableEvaluation);
+  const setEvaluationDetails = useHumanEvaluationDetailsStore(
+    (state) => state.setDataOverview
+  );
+  
+  const evaluationQuestions = useHumanEvaluationDetailsStore(
+    (state) => state.questions
+  )
+
+  const isAvaliableEvaluation =
+    evaluationDetails?.status.id === HumanEvaluationStatus.AVALIABLE;
+
+  const [optimisticAvaliable, setOptimisticAvaliable] = useOptimistic<boolean>(
+    isAvaliableEvaluation
+  );
   const [isPending, startTransition] = useTransition();
+
+  const isAvaliableToImportQuestions = !isAvaliableEvaluation && evaluationQuestions.length === 0;
 
   const handleChangeStatus = async () => {
     startTransition(async () => {
@@ -38,7 +54,13 @@ export function EvaluationHeaderActions({ evaluationDetails }: EvaluationHeaderA
       }
     });
   };
-  
+
+  const handleSharedEvaluation = async () => {
+    const link = await createSharedLink(evaluationDetails?.id || "");
+    navigator.clipboard.writeText(`${window.location.origin}/form/${link}`);
+    toast.success("Link copiado para a área de transferência");
+  };
+
   return (
     <div className="flex items-center gap-4">
       <div className="flex items-center gap-2">
@@ -51,16 +73,18 @@ export function EvaluationHeaderActions({ evaluationDetails }: EvaluationHeaderA
         />
       </div>
 
-      <ShowConditional
-        condition={!isAvaliableEvaluation}
-        then={<EvaluationHeaderImportQuestions evaluationId={id} />}
-        otherwise={
-          <Button disabled={isPending} className="w-36">
-            <Link2 />
-            Compartilhar
-          </Button>
-        }
-      />
+      <Show when={isAvaliableToImportQuestions}>
+        <EvaluationHeaderImportQuestions evaluationId={id} />
+      </Show>
+
+      <Button
+        disabled={isPending}
+        className="w-36"
+        onClick={handleSharedEvaluation}
+      >
+        <Link2 />
+        Compartilhar
+      </Button>
     </div>
   );
 }
