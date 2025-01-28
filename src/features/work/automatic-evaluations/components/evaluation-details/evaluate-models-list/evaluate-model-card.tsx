@@ -1,12 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { CircleCheck, LoaderCircle } from "lucide-react";
-import { EvaluatedModel } from "@/features/work/automatic-evaluations/types/evaluated-model";
 import { useState } from "react";
-import { useParams } from "next/navigation";
+import { toast } from "sonner";
+
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Show } from "@/components/ui/show";
+import { evaluateModelAction } from "@/features/work/automatic-evaluations/actions/evaluate-model";
+import { EvaluatedModel } from "@/features/work/automatic-evaluations/types/evaluated-model";
 
 type EvaluateModelCardProps = {
   model: EvaluatedModel;
@@ -17,23 +19,17 @@ export function EvaluateModelCard({
   model,
   isAvaliableForEvaluation,
 }: EvaluateModelCardProps) {
-  const params = useParams<{ evaluation_id: string }>();
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [metricResult, setMetricResult] = useState(model.metric_result);
 
   async function handleEvaluateMode() {
     try {
       setIsEvaluating(true);
-      const response = await fetch("/api/evaluate", {
-        method: "PUT",
-        body: JSON.stringify({
-          modelId: model.id,
-          evaluationId: params.evaluation_id,
-        }),
-      });
-
-      const data = await response.json();
-      setMetricResult(data.data?.perplexity);
+      const response = await evaluateModelAction(model.id);
+      if (response.data) {
+        setMetricResult(response.data.perplexity);
+        toast.success("Modelo avaliado com sucesso!");
+      };
     } finally {
       setIsEvaluating(false);
     }
