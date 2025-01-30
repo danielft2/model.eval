@@ -9,13 +9,12 @@ export class AppFetch implements HttpClient {
     const { endpoint, method } = config;
 
     const url = `${this.baseUrl}${endpoint}`;
-    console.log(this.baseUrl)
     const options_req = this.buildRequestConfig(method, config);
 
     try {
       const response = await fetch(url, options_req);
       const data: ResponseHttp<T> = await response.json();
-
+    
       this.verifyResponse(response, data);
 
       return data;

@@ -1,4 +1,5 @@
 import { fetchClient } from "@/api/fetch-client";
+import { retrieveEvaluatorId } from "./retrieve-evaluator-id";
 
 type EvaluateQuestionsActionProps = {
   key: string;
@@ -11,13 +12,16 @@ type EvaluateQuestionsActionProps = {
 }
 
 export async function evaluateQuestionsAction({ questions, key }: EvaluateQuestionsActionProps) {
+  const evaluatorId = await retrieveEvaluatorId();
+
   const response = await fetchClient.request({
     method: "POST",
     endpoint: "/evaluations/evaluate-questions",
     options: {
       headers: {
         Authorization: `Bearer ${key}`,
-      }
+        "Evaluator-Id": evaluatorId
+      },
     },
     body: questions
   })
