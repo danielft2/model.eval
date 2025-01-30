@@ -7,6 +7,6 @@ export type HumanEvaluationResponse = {
   use_answerability: boolean;
   use_utility: boolean;
   status: HumanEvaluationStatus;
-  evaluation_total: number;
+  number_of_evaluations: number;
 }
 

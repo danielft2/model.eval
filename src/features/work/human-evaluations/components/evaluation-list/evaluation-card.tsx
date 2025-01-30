@@ -14,7 +14,7 @@ type HumanEvaluationCardProps = {
 };
 
 export function HumanEvaluationCard({ data }: HumanEvaluationCardProps) {
-  const existsEvaluations = data.evaluation_total > 0;
+  const existsEvaluations = data.number_of_evaluations > 0;
 
   return (
     <div className="block rounded-lg border overflow-hidden border-slate-300 min-w-[400px] flex-1 font-heading relative">
@@ -45,7 +45,7 @@ export function HumanEvaluationCard({ data }: HumanEvaluationCardProps) {
           <p className="font-heading -tracking-wider font-medium text-sm text-slate-800">
             <ShowConditional
               condition={existsEvaluations}
-              then={`${data.evaluation_total} avaliações`}
+              then={`${data.number_of_evaluations} ${data.number_of_evaluations > 1 ? 'avaliações' : 'avaliação'}`}
               otherwise={"Ainda não possui avaliações"}
             />
           </p>
