@@ -1,11 +1,12 @@
 "use client";
 
-import { LoaderCircle } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { Wizard } from "react-use-wizard";
 
+import { LoadingFullScreen } from "@/components/loading/loading-full-screen";
 import { getEvaluationFormAction } from "@/features/form/actions/get-evaluation-form";
+import { ErrorScreenForm } from "@/features/form/components/error-screen-form";
 import { EvaluationFormResponse } from "@/features/form/http/responses/evaluation-form";
 
 import { ConceptsStep } from "./steps/concepts-step";
@@ -15,15 +16,22 @@ import { WelcomeStep } from "./steps/welcome-step";
 
 export function FormEvaluationWizard() {
   const [isLoading, setIsLoading] = useState(true);
+  const [errorStatusCode, setErrorStatusCode] = useState<number | null>(null);
+
   const [evaluationForm, setEvaluationForm] =
     useState<EvaluationFormResponse | null>(null);
 
   const { key } = useParams<{ key: string }>();
   const getEvaluationForm = useCallback(async () => {
     setIsLoading(true);
-    const response = await getEvaluationFormAction(key);
-    if (response.data) setEvaluationForm(response.data);
-    setIsLoading(false);
+
+    try {
+      const response = await getEvaluationFormAction(key);
+      if (response.data) setEvaluationForm(response.data);
+      if (response.error) setErrorStatusCode(response.error.status);
+    } finally {
+      setIsLoading(false);
+    }
   }, [key]);
 
   useEffect(() => {
@@ -36,13 +44,9 @@ export function FormEvaluationWizard() {
     use_utility: evaluationForm?.evaluation?.use_utility || false,
   };
 
-  if (isLoading)
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <LoaderCircle className="animate-spin text-brand-700" size={32}/>
-      </div>
-    );
-
+  if (isLoading) return <LoadingFullScreen />
+  if (errorStatusCode) return <ErrorScreenForm errorStatusCode={errorStatusCode} />;
+  
   return (
     <Wizard>
       <WelcomeStep

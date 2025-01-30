@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Link2 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useOptimistic, useTransition } from "react";
@@ -37,7 +38,7 @@ export function EvaluationHeaderActions({
   const [optimisticAvaliable, setOptimisticAvaliable] = useOptimistic<boolean>(
     isAvaliableEvaluation
   );
-  const [isPending, startTransition] = useTransition();
+  const [_, startTransition] = useTransition();
 
   const isAvaliableToImportQuestions = !isAvaliableEvaluation && evaluationQuestions.length === 0;
 
@@ -78,7 +79,6 @@ export function EvaluationHeaderActions({
       </Show>
 
       <Button
-        disabled={isPending}
         className="w-36"
         onClick={handleSharedEvaluation}
       >
