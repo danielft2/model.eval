@@ -75,7 +75,7 @@ export function FormQuestion({
             <div className="space-y-5">
               <MetricAsk>
                 Levando em consideração o descritor, o texto e as alternativas,
-                em sua opinião você considera que essa questão é respondível?
+                em sua opinião você considera que essa questão é relevante?
               </MetricAsk>
               <Controller
                 name={`questions.${index}.considered_relevance`}
