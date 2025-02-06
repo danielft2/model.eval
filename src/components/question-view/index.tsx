@@ -1,26 +1,42 @@
 import { cn } from "@/lib/utils";
 import { ImportedQuestion } from "@/types/imported-question";
+import { useState } from "react";
 
 type QuestionViewProps = {
   question: ImportedQuestion;
   className?: string;
-}
+};
 
 export function QuestionView({ question, className }: QuestionViewProps) {
+  const [isExpandedText, setIsExpandedText] = useState(false);
+
   const questionOptions = question.options
     .replace(/^\['|'\]$/g, "")
     .split("', '");
   const optionsLabels = ["A", "B", "C", "D"];
-  
+
   return (
     <div className={cn("space-y-7", className)}>
       <div className="space-y-2">
         <h1 className="font-heading font-medium text-slate-800 -tracking-wider">
           {question.title}
         </h1>
-        <p className="font-body text-sm font-medium text-slate-600 max-w-full line-clamp-3 leading-relaxed">
+        <p
+          className={cn(
+            "font-body text-sm font-medium text-slate-600 max-w-full leading-relaxed",
+            {
+              "line-clamp-3": !isExpandedText,
+            }
+          )}
+        >
           {question.text}
         </p>
+        <button
+          onClick={() => setIsExpandedText((state) => !state)}
+          className="text-brand-800 font-medium text-sm underline"
+        >
+          {isExpandedText ? "ver menos" : "ver texto completo"}
+        </button>
       </div>
 
       <div className="font-heading -tracking-wider space-y-2">
