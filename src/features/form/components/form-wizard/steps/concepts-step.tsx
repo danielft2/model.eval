@@ -57,28 +57,29 @@ export function ConceptsStep({ metricsUsed }: ConceptsStepProps) {
             texto fornecido.
           </MetricAccordion>
         </Show>
-        
+
         <Show when={metricsUsed.use_answerability}>
           <MetricAccordion
             label="Respondibilidade"
             activeAccordion={atictiveAccordion}
             accordionValue="answerability"
           >
-            Essa métrica tem como objetivo avaliar se o modelo respondeu
-            adequadamente às perguntas feitas. Possui uma escala binária (sim ou
-            não).
+            Essa métrica tem como objetivo avaliar se a questão gerada é
+            respondível, ou seja se há algum trecho no texto que responde à
+            pergunta, ou que poderia levar a uma resposta sem nenhuma outra
+            informação necessária.
           </MetricAccordion>
         </Show>
-        
+
         <Show when={metricsUsed.use_utility}>
           <MetricAccordion
             label="Utilidade"
             activeAccordion={atictiveAccordion}
             accordionValue="utility"
           >
-            Essa métrica tem como objetivo avaliar se o modelo respondeu
-            adequadamente às perguntas feitas. Possui uma escala binária (sim ou
-            não).
+            Essa métrica tem como objetivo avaliar se a questão é útil para o
+            contexto pedagógico. Então suponha que você queira ensinar sobre um
+            descritor, avalie se a questão apresentada é útil para isso.
           </MetricAccordion>
         </Show>
       </Accordion.Root>
