@@ -43,7 +43,7 @@ export function Sidebar() {
                   onClickItem={handleSelecteItem}
                 >
                   <CircleHelp />
-                  Questão {index + 1} {question.descriptor_code}
+                  Q{index + 1} {question.descriptor_code}
                 </SidebarItem>
               </li>
             ))}
