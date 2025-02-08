@@ -12,7 +12,7 @@ export function WelcomeStep({ instructions }: WelcomeStepProps) {
   return (
     <div className="flex flex-col items-center h-full justify-center">
       <div className="max-w-[800px] flex flex-col items-center gap-8">
-        <Image src="/welcome-form.svg" alt="ilustração bem vindo" width={200} height={200} />
+        <Image src={"/welcome-form.svg"} alt="ilustração bem vindo" width={200} height={200} />
         <div className="text-center space-y-2">
           <h1 className="text-slate-950 font-heading -tracking-wider font-medium text-4xl">
             Olá, Professor(a)! É bom tê-lo aqui
