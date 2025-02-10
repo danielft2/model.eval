@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { decodeJwt } from 'jose'
 import { verifyToken } from "./features/auth/actions/verify-token";
 
 const publicRoutes = [
@@ -52,6 +53,17 @@ export async function middleware(request: NextRequest) {
   }
 
   if (authToken && publicRoute && publicRoute.whenAuthenticated === "redirect") {
+    const decodedToken = decodeJwt(authToken);
+    const expirationTime = decodedToken.exp ? decodedToken.exp * 1000 : 0;
+
+    if (Date.now() > expirationTime) {
+      request.cookies.delete("token");
+
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED;
+      return NextResponse.redirect(redirectUrl);
+    }
+    
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/workspace/work";
     return NextResponse.redirect(redirectUrl);
