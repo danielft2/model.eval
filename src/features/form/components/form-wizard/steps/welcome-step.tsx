@@ -15,7 +15,7 @@ export function WelcomeStep({ instructions }: WelcomeStepProps) {
         <Image src={"/welcome-form.svg"} alt="ilustração bem vindo" width={200} height={200} />
         <div className="text-center space-y-2">
           <h1 className="text-slate-950 font-heading -tracking-wider font-medium text-4xl">
-            Olá, Professor(a)! É bom tê-lo aqui
+            Olá, Avaliador! É bom tê-lo aqui
           </h1>
           <p className="text-slate-600 font-body font-medium">
             {instructions}
