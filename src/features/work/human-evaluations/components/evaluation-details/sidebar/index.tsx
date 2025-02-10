@@ -32,7 +32,7 @@ export function Sidebar() {
 
         <div className="space-y-1 h-full">
           <span className="font-heading text-xs font-medium text-slate-600">
-            DESCRITORES
+            QUESTÕES
           </span>
           <ul className="space-y-2">
             {questions.map((question, index) => (

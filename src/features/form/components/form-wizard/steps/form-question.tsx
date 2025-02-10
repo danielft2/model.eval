@@ -201,7 +201,7 @@ export function FormQuestion({
             </Button>
           </Show>
           <Button disabled={isNextButtonDisabled} onClick={handleNextQuestion}>
-            Proxima
+            {isLastStep ? 'Finalizar' : 'Proxima'}
           </Button>
         </div>
       </div>
