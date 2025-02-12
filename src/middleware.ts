@@ -5,22 +5,24 @@ import { verifyToken } from "./features/auth/actions/verify-token";
 
 const publicRoutes = [
   { path: "/", whenAuthenticated: "redirect" },
-  { path: "/auth/signin", whenAuthenticated: "redirect" }
+  { path: "/form/[key]", whenAuthenticated: "next" },
 ] as const;
 
-const REDIRECT_WHEN_NOT_AUTHENTICATED = "/auth/signin";
+const REDIRECT_WHEN_NOT_AUTHENTICATED = "/";
 
 export async function middleware(request: NextRequest) {
   const pathName = request.nextUrl.pathname;
   const publicRoute = publicRoutes.find((route) => route.path === pathName);
   const authToken = request.cookies.get("token")?.value;
 
-  // Verifique se o token existe na URL (exclusivo para "/workspace")
+  if (!authToken && publicRoute) {
+    return NextResponse.next();
+  }
+
   if (!authToken && pathName.startsWith("/workspace")) {
     const searchParams = new URLSearchParams(request.nextUrl.search);
     const token = searchParams.get("token") ?? "";
 
-    // Verifique se o token é válido
     const userPayload = await verifyToken(token);
 
     if (userPayload?.id) {
@@ -30,20 +32,9 @@ export async function middleware(request: NextRequest) {
       return response;
     } 
 
-    // Caso não seja válido, redirecione para a página de login
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED;
     return NextResponse.redirect(redirectUrl);
-  }
-
-  // Verifique os casos de autenticação para outras páginas
-  if (!authToken && publicRoute || pathName.startsWith("/form")) {
-    if (pathName === '/') {
-      const redirectUrl = request.nextUrl.clone();
-      redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED;
-      return NextResponse.redirect(redirectUrl);
-    }
-    return NextResponse.next();
   }
 
   if (!authToken && !publicRoute) {
@@ -52,25 +43,29 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
+  if (authToken && !publicRoute) {
+    return NextResponse.next();
+  }
+
   if (authToken && publicRoute && publicRoute.whenAuthenticated === "redirect") {
+    const searchParams = new URLSearchParams(request.nextUrl.search);
+    const token = searchParams.get("token") ?? "";
+
     const decodedToken = decodeJwt(authToken);
     const expirationTime = decodedToken.exp ? decodedToken.exp * 1000 : 0;
 
-    if (Date.now() > expirationTime) {
-      request.cookies.delete("token");
+    if (token === 'expired' || Date.now() > expirationTime) {
+      const response = NextResponse.next();
 
-      const redirectUrl = request.nextUrl.clone();
-      redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED;
-      return NextResponse.redirect(redirectUrl);
+      response.cookies.delete("token");
+      response.cookies.delete("user");
+
+      return response;
     }
-    
+
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/workspace/work";
     return NextResponse.redirect(redirectUrl);
-  }
-
-  if (authToken && !publicRoute) {
-    return NextResponse.next();
   }
 
   return NextResponse.next();
