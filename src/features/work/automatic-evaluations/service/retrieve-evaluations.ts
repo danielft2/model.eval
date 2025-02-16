@@ -18,7 +18,7 @@ export async function retrieveEvaluations(): Promise<
       },
       next: {
         tags: [REVALIDATE_TAGS.AUTOMATIC_EVALUATIONS],
-      },
+      }
     },
   });
 

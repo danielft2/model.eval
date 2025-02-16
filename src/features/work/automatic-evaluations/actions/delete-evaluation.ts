@@ -4,6 +4,7 @@ import { retrieveAccessToken } from "@/actions/retrieve-access-token";
 import { fetchClient } from "@/api/fetch-client";
 import { ResponseApp } from "@/api/response";
 import { verifyResponse } from "@/api/verify-response";
+import { REVALIDATE_TAGS } from "@/constants/revalidate-tags";
 import { revalidateTag } from "next/cache";
 
 export async function deleteEvaluationAction(
@@ -21,7 +22,7 @@ export async function deleteEvaluationAction(
   });
   
   await verifyResponse(response);
-  if (response.data) revalidateTag("automatic-evaluations");
+  if (response.message) revalidateTag(REVALIDATE_TAGS.AUTOMATIC_EVALUATIONS);
 
   return {
     data: response?.message || "",
