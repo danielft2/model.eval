@@ -21,7 +21,7 @@ export async function deleteHumanEvaluationAction(evaluationId: string): Promise
   });
 
   await verifyResponse(response);
-  if (response.data) revalidateTag(REVALIDATE_TAGS.HUMAN_EVALUATIONS);
+  if (response.message) revalidateTag(REVALIDATE_TAGS.HUMAN_EVALUATIONS);
 
   return {
     data: response?.message || "",
