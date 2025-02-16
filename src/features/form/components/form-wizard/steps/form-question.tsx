@@ -12,8 +12,7 @@ import { RadioAlternative } from "@/features/form/components/radio-alternative";
 import { FormQuestionsData } from "@/features/form/schemas/form-questions";
 import { useLoadingStore } from "@/store/loading-store";
 import { ImportedQuestion } from "@/types/imported-question";
-import { UtilityMetricType } from "@/types/utilty-metric-type";
-import { BinaryMetricType } from "@/types/binary-metric-type";
+import { eBinaryMetricOption, eUtilityMetricScale } from "@/core/enums";
 
 type FormQuestionsProps = {
   index: number;
@@ -87,13 +86,13 @@ export function FormQuestion({
                     value={String(value) || undefined}
                   >
                     <RadioGroup.Item
-                      value={String(BinaryMetricType.CONSIDERED)}
+                      value={String(eBinaryMetricOption.CONSIDERED)}
                       asChild
                     >
                       <RadioAlternative letter="A">Sim, considero</RadioAlternative>
                     </RadioGroup.Item>
                     <RadioGroup.Item
-                      value={String(BinaryMetricType.NOT_CONSIDERED)}
+                      value={String(eBinaryMetricOption.NOT_CONSIDERED)}
                       asChild
                     >
                       <RadioAlternative letter="B">Não considero</RadioAlternative>
@@ -120,13 +119,13 @@ export function FormQuestion({
                     value={String(value) || undefined}
                   >
                     <RadioGroup.Item
-                      value={String(BinaryMetricType.CONSIDERED)}
+                      value={String(eBinaryMetricOption.CONSIDERED)}
                       asChild
                     >
                       <RadioAlternative letter="A">Sim, considero</RadioAlternative>
                     </RadioGroup.Item>
                     <RadioGroup.Item
-                      value={String(BinaryMetricType.NOT_CONSIDERED)}
+                      value={String(eBinaryMetricOption.NOT_CONSIDERED)}
                       asChild
                     >
                       <RadioAlternative letter="B">Não considero</RadioAlternative>
@@ -155,14 +154,14 @@ export function FormQuestion({
                     value={value?.toString() || undefined}
                   >
                     <RadioGroup.Item
-                      value={String(UtilityMetricType.NOT_USEFUL)}
+                      value={String(eUtilityMetricScale.NOT_USEFUL)}
                       asChild
                     >
                       <RadioAlternative letter="A">Não útil</RadioAlternative>
                     </RadioGroup.Item>
                     <RadioGroup.Item
                       value={String(
-                        UtilityMetricType.USEFUL_WITH_IMPORTANTS_EDITS
+                        eUtilityMetricScale.USEFUL_WITH_IMPORTANTS_EDITS
                       )}
                       asChild
                     >
@@ -171,7 +170,7 @@ export function FormQuestion({
                       </RadioAlternative>
                     </RadioGroup.Item>
                     <RadioGroup.Item
-                      value={String(UtilityMetricType.USEFUL_WITH_MINOR_EDITS)}
+                      value={String(eUtilityMetricScale.USEFUL_WITH_MINOR_EDITS)}
                       asChild
                     >
                       <RadioAlternative letter="C">
@@ -179,7 +178,7 @@ export function FormQuestion({
                       </RadioAlternative>
                     </RadioGroup.Item>
                     <RadioGroup.Item
-                      value={String(UtilityMetricType.USEFUL_WITHOUT_EDITS)}
+                      value={String(eUtilityMetricScale.USEFUL_WITHOUT_EDITS)}
                       asChild
                     >
                       <RadioAlternative letter="D">Útil sem edições</RadioAlternative>

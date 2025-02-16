@@ -1,4 +1,4 @@
-export enum UtilityMetricType {
+export enum eUtilityMetricScale {
   NOT_USEFUL = 1,
   USEFUL_WITH_IMPORTANTS_EDITS = 2,
   USEFUL_WITH_MINOR_EDITS = 3,
