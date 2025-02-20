@@ -9,16 +9,16 @@ import {
   FormQuestionsSchema,
 } from "@/features/form/schemas/form-questions";
 import { useLoadingStore } from "@/store/loading-store";
-import { ImportedQuestion } from "@/types/imported-question";
+import { ImportedQuestion } from "@/core/entities/imported-question";
 
 import { FormQuestion } from "./form-question";
 
 type FormQuestionsProps = {
   questions: ImportedQuestion[];
   metricsUsed: {
-    use_relevance: boolean;
-    use_answerability: boolean;
-    use_utility: boolean;
+    useRelevance: boolean;
+    useAnswerability: boolean;
+    useUtility: boolean;
   };
 };
 
@@ -31,11 +31,11 @@ export function FormQuestions({ questions, metricsUsed }: FormQuestionsProps) {
     defaultValues: {
       questions: questions?.map((question) => ({
         id: question.id,
-        considered_answerability: metricsUsed.use_answerability
+        considered_answerability: metricsUsed.useAnswerability
           ? undefined
           : null,
-        considered_relevance: metricsUsed.use_relevance ? undefined : null,
-        utility: metricsUsed.use_utility ? undefined : null,
+        considered_relevance: metricsUsed.useRelevance ? undefined : null,
+        utility: metricsUsed.useUtility ? undefined : null,
       })),
     },
     mode: "all",

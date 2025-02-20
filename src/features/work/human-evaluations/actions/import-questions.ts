@@ -4,7 +4,7 @@ import { retrieveAccessToken } from "@/actions/retrieve-access-token";
 import { fetchClient } from "@/api/fetch-client";
 import { ResponseApp } from "@/api/response";
 import { verifyResponse } from "@/api/verify-response";
-import { HumanEvaluationOverview } from "../http/responses/human-evaluation-overview";
+import { HumanEvaluationOverview } from "../http/responses/get-overview";
 
 export async function importQuestionsAction(evaluationId: string, formData: FormData): Promise<ResponseApp<HumanEvaluationOverview, string>> {
   const token = await retrieveAccessToken();

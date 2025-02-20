@@ -1,5 +1,5 @@
-import { HumanEvaluation } from "@/types/human-evaluation";
-import { ImportedQuestion } from "@/types/imported-question";
+import { HumanEvaluation } from "@/core/entities/human-evaluation";
+import { ImportedQuestion } from "@/core/entities/imported-question";
 
 type Evaluation = Omit<HumanEvaluation, "id">;
 

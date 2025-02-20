@@ -1,6 +1,6 @@
 "use server";
 
-import { User } from "@/types/user";
+import { User } from "@/core/entities/user";
 import { cookies } from "next/headers";
 
 export async function retrieveCurrentUser(): Promise<User | null> {

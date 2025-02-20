@@ -1,11 +1,11 @@
 export type ImportedQuestion = {
   id: string;
-  descriptor_code: string;
+  descriptorCode: string;
   title: string;
   text: string;
   command: string;
   descriptor: string;
   answer: string;
-  answer_item: string;
+  answerItem: string;
   options: string;
 }

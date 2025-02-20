@@ -1,4 +1,4 @@
-export enum eModelTaskType {
+export enum EModelTaskType {
   QUESTION_GENERATE = 1,
   QUESTION_ANSWER = 2,
   DISTRACTOR_GENERATE = 3,

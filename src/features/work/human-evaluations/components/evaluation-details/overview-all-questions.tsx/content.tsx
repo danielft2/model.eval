@@ -5,7 +5,7 @@ import { toast } from "sonner";
 
 import { Show } from "@/components/ui/show";
 import { formatRechartData } from "@/lib/rechart";
-import { HumanEvaluationAllQuestionsOverview } from "../../../http/responses/human-evaluation-allquestions-overview";
+import { HumanEvaluationAllQuestionsOverview } from "../../../http/responses/get-allquestions-overview";
 import { retrieveHumanEvaluationAllQuestionsOverview } from "../../../service/retieve-evaluation-allquestions";
 import { PieChartMetric } from "../metrics-results/pie-chart-metric";
 import { OverviewCard } from "../overview-card";

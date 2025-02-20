@@ -39,9 +39,9 @@ export function FormEvaluationWizard() {
   }, [getEvaluationForm]);
 
   const metricsUsed = {
-    use_relevance: evaluationForm?.evaluation?.use_relevance || false,
-    use_answerability: evaluationForm?.evaluation?.use_answerability || false,
-    use_utility: evaluationForm?.evaluation?.use_utility || false,
+    useRelevance: evaluationForm?.evaluation?.useRelevance || false,
+    useAnswerability: evaluationForm?.evaluation?.useAnswerability || false,
+    useUtility: evaluationForm?.evaluation?.useUtility || false,
   };
 
   if (isLoading) return <LoadingFullScreen />

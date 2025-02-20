@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { ImportedQuestion } from "@/types/imported-question";
+import { ImportedQuestion } from "@/core/entities/imported-question";
 import { useState } from "react";
 
 type QuestionViewProps = {
@@ -49,7 +49,7 @@ export function QuestionView({ question, className }: QuestionViewProps) {
               <span
                 className={cn("text-[15px] text-slate-600", {
                   "text-brand-800 font-medium":
-                    optionsLabels[index].toLowerCase() == question.answer_item,
+                    optionsLabels[index].toLowerCase() == question.answerItem,
                 })}
               >
                 {`${optionsLabels[index]})`} {option}

@@ -2,12 +2,19 @@ import { retrieveAccessToken } from "@/actions/retrieve-access-token";
 import { fetchClient } from "@/api/fetch-client";
 import { ResponseApp } from "@/api/response";
 import { REVALIDATE_TAGS } from "@/constants/revalidate-tags";
-import { HumanEvaluationResponse } from "@/features/work/human-evaluations/http/responses/human-evaluations";
+import {
+  iHumanEvaluationResponse,
+  iHumanEvaluationResponseToHumanEvaluationCard,
+} from "@/features/work/human-evaluations/http/responses/get-evaluations-response";
 
-export async function retieveHumanEvaluations(): Promise<ResponseApp<HumanEvaluationResponse[], string>> {
+import { tHumanEvaluationCard } from "../core/types/human-evaluation-card";
+
+export async function retieveHumanEvaluations(): Promise<
+  ResponseApp<tHumanEvaluationCard[], string>
+> {
   const token = await retrieveAccessToken();
 
-  const response = await fetchClient.request<HumanEvaluationResponse[]>({
+  const response = await fetchClient.request<iHumanEvaluationResponse[]>({
     method: "GET",
     endpoint: "/human-evaluation",
     options: {
@@ -21,7 +28,8 @@ export async function retieveHumanEvaluations(): Promise<ResponseApp<HumanEvalua
   });
 
   return {
-    data: response.data || [],
+    data:
+      response.data?.map(iHumanEvaluationResponseToHumanEvaluationCard) || [],
     error: response.error?.message || null,
-  }
+  };
 }

@@ -9,8 +9,8 @@ import { Show } from "@/components/ui/show";
 import { Switch } from "@/components/ui/switch";
 import { changeStatusAction } from "@/features/work/human-evaluations/actions/change-status";
 import { createSharedLink } from "@/features/work/human-evaluations/actions/create-shared-link";
-import { HumanEvaluationDetails } from "@/features/work/human-evaluations/http/responses/human-evaluation-details";
-import { HumanEvaluationStatus } from "@/features/work/human-evaluations/types/evaluation-status";
+import { HumanEvaluationDetails } from "@/features/work/human-evaluations/http/responses/get-details-response";
+import { HumanEvaluationStatus } from "@/core/enums/human-evaluation-status";
 import { useHumanEvaluationDetailsStore } from "@/store/human-evaluation-details";
 
 import { EvaluationHeaderImportQuestions } from "./evaluation-header-import-questions";

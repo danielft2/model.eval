@@ -35,7 +35,7 @@ export function EvaluationHeaderImportQuestions({ evaluationId }: EvaluationHead
 
   function handleUpdateOverviewAllQuestions() {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("descriptor_code", "0");
+    params.set("descriptorCode", "0");
     router.push(`${pathname}?${params.toString()}`);
   }
 

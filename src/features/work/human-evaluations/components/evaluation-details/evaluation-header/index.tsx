@@ -47,15 +47,15 @@ export function HumanEvaluationDetailsHeader() {
           </h1>
 
           <div className="flex gap-2 mt-2">
-            <Show when={!!evaluationDetails?.use_relevance}>
+            <Show when={!!evaluationDetails?.useRelevance}>
               <Badge variant="blue">Relevância</Badge>
             </Show>
 
-            <Show when={!!evaluationDetails?.use_answerability}>
+            <Show when={!!evaluationDetails?.useAnswerability}>
               <Badge variant="violet">Respondibilidade</Badge>
             </Show>
 
-            <Show when={!!evaluationDetails?.use_utility}>
+            <Show when={!!evaluationDetails?.useUtility}>
               <Badge variant="green">Utilidade</Badge>
             </Show>
           </div>

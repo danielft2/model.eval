@@ -9,9 +9,9 @@ import { Show } from "@/components/ui/show";
 
 type ConceptsStepProps = {
   metricsUsed: {
-    use_relevance: boolean;
-    use_answerability: boolean;
-    use_utility: boolean;
+    useRelevance: boolean;
+    useAnswerability: boolean;
+    useUtility: boolean;
   };
 };
 
@@ -45,7 +45,7 @@ export function ConceptsStep({ metricsUsed }: ConceptsStepProps) {
         onValueChange={setActiveAccordion}
         className="space-y-3 w-full lg:w-[800px]"
       >
-        <Show when={metricsUsed.use_relevance}>
+        <Show when={metricsUsed.useRelevance}>
           <MetricAccordion
             label="Relevância"
             activeAccordion={atictiveAccordion}
@@ -58,7 +58,7 @@ export function ConceptsStep({ metricsUsed }: ConceptsStepProps) {
           </MetricAccordion>
         </Show>
         
-        <Show when={metricsUsed.use_answerability}>
+        <Show when={metricsUsed.useAnswerability}>
           <MetricAccordion
             label="Respondibilidade"
             activeAccordion={atictiveAccordion}
@@ -70,7 +70,7 @@ export function ConceptsStep({ metricsUsed }: ConceptsStepProps) {
           </MetricAccordion>
         </Show>
         
-        <Show when={metricsUsed.use_utility}>
+        <Show when={metricsUsed.useUtility}>
           <MetricAccordion
             label="Utilidade"
             activeAccordion={atictiveAccordion}

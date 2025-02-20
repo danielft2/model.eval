@@ -1,7 +1,7 @@
 import { retrieveAccessToken } from "@/actions/retrieve-access-token";
 import { fetchClient } from "@/api/fetch-client";
 import { verifyResponse } from "@/api/verify-response";
-import { HumanEvaluationDetails } from "../http/responses/human-evaluation-details";
+import { HumanEvaluationDetails } from "../http/responses/get-details-response";
 
 export async function changeStatusAction(evaluationId: string) {
   const token = await retrieveAccessToken();

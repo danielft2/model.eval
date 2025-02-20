@@ -12,7 +12,7 @@ import { insertEvaluationAction } from "@/features/work/automatic-evaluations/ac
 import { retrieveEvaluationDetailsAction } from "@/features/work/automatic-evaluations/actions/retrieve-evaluation-details";
 import { evaluationInsertScheme } from "@/features/work/automatic-evaluations/schemes/evalution-insert";
 import { useLoadingStore } from "@/store/loading-store";
-import { eModelTaskType } from "@/core/enums";
+import { EModelTaskType } from "@/core/enums";
 
 import { ChoiceEvaluateMetric } from "./steps/choice-evaluate-metric";
 import { ModelDGConfig } from "./steps/model-dg-config";
@@ -67,9 +67,9 @@ export function EvaluationInsertForm({ onClose }: FormWrappperProps) {
         if (response.data) {
           const { evaluation, models } = response.data;
           
-          const modelQG = models.find((model) => model.task_id == eModelTaskType.QUESTION_GENERATE);
-          const modelQA = models.find((model) => model.task_id == eModelTaskType.QUESTION_ANSWER);
-          const modelDG = models.find((model) => model.task_id == eModelTaskType.DISTRACTOR_GENERATE);
+          const modelQG = models.find((model) => model.task_id == EModelTaskType.QUESTION_GENERATE);
+          const modelQA = models.find((model) => model.task_id == EModelTaskType.QUESTION_ANSWER);
+          const modelDG = models.find((model) => model.task_id == EModelTaskType.DISTRACTOR_GENERATE);
 
           evaluationInsertForm.reset({
             title: evaluation.title,

@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ImportedQuestion } from "@/features/work/human-evaluations/http/responses/human-evaluation-overview";
+import { ImportedQuestion } from "@/features/work/human-evaluations/http/responses/get-overview";
 import { useHumanEvaluationDetailsStore } from "@/store/human-evaluation-details";
 import { Content } from "./content";
 
@@ -17,7 +17,7 @@ export function OverviewAllQuestions() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const descriptorCode = searchParams.get("descriptor_code") ?? "0";
+  const descriptorCode = searchParams.get("descriptorCode") ?? "0";
 
   const questionsDecriptors = useHumanEvaluationDetailsStore(
     (state) => state.questions
@@ -26,7 +26,7 @@ export function OverviewAllQuestions() {
   const questionsOptions = useMemo(() => {
     return questionsDecriptors.reduce((acc, current) => {
       if (
-        !acc.some((item) => item.descriptor_code === current.descriptor_code)
+        !acc.some((item) => item.descriptorCode === current.descriptorCode)
       ) {
         acc.push(current);
       }
@@ -36,7 +36,7 @@ export function OverviewAllQuestions() {
 
   function handleChangedDescriptor(descriptorCode: string) {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("descriptor_code", descriptorCode);
+    params.set("descriptorCode", descriptorCode);
     router.push(`${pathname}?${params.toString()}`);
   }
 
@@ -53,8 +53,8 @@ export function OverviewAllQuestions() {
         <SelectContent>
           <SelectItem value="0">Todos os descritores</SelectItem>
           {questionsOptions.map((question) => (
-            <SelectItem key={question.id} value={question.descriptor_code}>
-              {question.descriptor_code}
+            <SelectItem key={question.id} value={question.descriptorCode}>
+              {question.descriptorCode}
             </SelectItem>
           ))}
         </SelectContent>

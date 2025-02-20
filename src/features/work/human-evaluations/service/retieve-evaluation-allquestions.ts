@@ -4,7 +4,7 @@ import { retrieveAccessToken } from "@/actions/retrieve-access-token";
 import { fetchClient } from "@/api/fetch-client";
 import { ResponseApp } from "@/api/response";
 import { verifyResponse } from "@/api/verify-response";
-import { HumanEvaluationAllQuestionsOverview } from "../http/responses/human-evaluation-allquestions-overview";
+import { HumanEvaluationAllQuestionsOverview } from "../http/responses/get-allquestions-overview";
 
 export async function retrieveHumanEvaluationAllQuestionsOverview(
   evaluationId: string,
@@ -13,7 +13,7 @@ export async function retrieveHumanEvaluationAllQuestionsOverview(
   const token = await retrieveAccessToken();
   const endpoint =
     descriptor != "0"
-      ? `/human-evaluation/overview/global-results/${evaluationId}?descriptor_code=${descriptor}`
+      ? `/human-evaluation/overview/global-results/${evaluationId}?descriptorCode=${descriptor}`
       : `/human-evaluation/overview/global-results/${evaluationId}`;
 
   const response =

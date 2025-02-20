@@ -1,4 +1,4 @@
-import { HumanEvaluationDetails } from "@/features/work/human-evaluations/http/responses/human-evaluation-details";
+import { HumanEvaluationDetails } from "@/features/work/human-evaluations/http/responses/get-details-response";
 
 export type HumanEvaluationOverview = {
   evaluation: HumanEvaluationDetails;
@@ -7,5 +7,5 @@ export type HumanEvaluationOverview = {
 
 export type ImportedQuestion = {
   id: string;
-  descriptor_code: string;
+  descriptorCode: string;
 }

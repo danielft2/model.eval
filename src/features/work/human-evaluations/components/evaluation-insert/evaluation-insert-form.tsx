@@ -39,15 +39,15 @@ export function HumanEvaluationInsertForm({
       title: "",
       instructions: "",
       num_questions_of_evaluator: undefined,
-      use_relevance: false,
-      use_answerability: false,
-      use_utility: false,
+      useRelevance: false,
+      useAnswerability: false,
+      useUtility: false,
     },
   });
 
   async function handleSubmitData(data: HumanEvaluationInsertData) {
     const shouldUseMetrics =
-      data.use_relevance || data.use_answerability || data.use_utility;
+      data.useRelevance || data.useAnswerability || data.useUtility;
     if (!shouldUseMetrics) {
       toast.error("Selecione pelo menos uma métrica de avaliação.");
       return;

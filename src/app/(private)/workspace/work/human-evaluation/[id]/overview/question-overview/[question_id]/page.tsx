@@ -49,7 +49,7 @@ export default async function QuestionOverviewPage({
                   className={cn("text-[15px] text-slate-600", {
                     "text-brand-800 font-medium":
                       optionsLabels[index].toLowerCase() ==
-                      question.answer_item,
+                      question.answerItem,
                   })}
                 >
                   {`${optionsLabels[index]})`} {option}

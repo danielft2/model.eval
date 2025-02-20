@@ -3,7 +3,7 @@
 import { retrieveAccessToken } from "@/actions/retrieve-access-token";
 import { fetchClient } from "@/api/fetch-client";
 import { ResponseApp } from "@/api/response";
-import { HumanEvaluationOverview } from "../http/responses/human-evaluation-overview";
+import { HumanEvaluationOverview } from "../http/responses/get-overview";
 import { verifyResponse } from "@/api/verify-response";
 
 export async function retrieveHumanEvaluationOverview(

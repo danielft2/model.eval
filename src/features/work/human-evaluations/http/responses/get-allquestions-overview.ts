@@ -1,4 +1,4 @@
-import { BinaryMetric, UtilityMetric } from "@/features/work/human-evaluations/types/human-metrics";
+import { BinaryMetric, UtilityMetric } from "@/features/work/human-evaluations/core/interfaces/human-metrics";
 
 export type MetricsResult = {
   relevance: BinaryMetric;

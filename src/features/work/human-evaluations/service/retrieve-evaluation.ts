@@ -1,7 +1,7 @@
 import { retrieveAccessToken } from "@/actions/retrieve-access-token";
 import { fetchClient } from "@/api/fetch-client";
 import { ResponseApp } from "@/api/response";
-import { HumanEvaluationDetails } from "../http/responses/human-evaluation-details";
+import { HumanEvaluationDetails } from "../http/responses/get-details-response";
 import { verifyResponse } from "@/api/verify-response";
 
 export async function retrieveHumanEvaluation(

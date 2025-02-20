@@ -1,20 +1,21 @@
+import { CircleCheck, CircleMinus } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { CircleCheck, CircleMinus } from "lucide-react";
 
-import { HumanEvaluationResponse } from "@/features/work/human-evaluations/http/responses/human-evaluations";
-import { HumanEvaluationStatus } from "@/features/work/human-evaluations/types/evaluation-status";
 import { Badge } from "@/components/ui/badge";
-import { HumanEvaluationCardOptions } from "./evaluation-card-options";
-import { ShowConditional } from "@/components/ui/show-conditional";
 import { Show } from "@/components/ui/show";
+import { ShowConditional } from "@/components/ui/show-conditional";
+import { EHumanEvaluationStatus } from "@/core/enums";
+import { tHumanEvaluationCard } from "@/features/work/human-evaluations/core/types/human-evaluation-card";
+
+import { HumanEvaluationCardOptions } from "./evaluation-card-options";
 
 type HumanEvaluationCardProps = {
-  data: HumanEvaluationResponse;
+  data: tHumanEvaluationCard;
 };
 
 export function HumanEvaluationCard({ data }: HumanEvaluationCardProps) {
-  const existsEvaluations = data.number_of_evaluations > 0;
+  const existsEvaluations = data.numberOfEvaluations > 0;
 
   return (
     <div className="block rounded-lg border overflow-hidden border-slate-300 min-w-[400px] flex-1 font-heading relative">
@@ -24,13 +25,13 @@ export function HumanEvaluationCard({ data }: HumanEvaluationCardProps) {
             {data.title}
           </h1>
           <div className="flex items-center gap-1">
-            <Show when={data.use_relevance}>
+            <Show when={data.useRelevance}>
               <Badge variant="blue">Relevância</Badge>
             </Show>
-            <Show when={data.use_answerability}>
+            <Show when={data.useAnswerability}>
               <Badge variant="violet">Respondibilidade</Badge>
             </Show>
-            <Show when={data.use_utility}>
+            <Show when={data.useUtility}>
               <Badge variant="green">Utilidade</Badge>
             </Show>
           </div>
@@ -45,14 +46,14 @@ export function HumanEvaluationCard({ data }: HumanEvaluationCardProps) {
           <p className="font-heading -tracking-wider font-medium text-sm text-slate-800">
             <ShowConditional
               condition={existsEvaluations}
-              then={`${data.number_of_evaluations} ${data.number_of_evaluations > 1 ? 'avaliações' : 'avaliação'}`}
+              then={`${data.numberOfEvaluations} ${data.numberOfEvaluations > 1 ? 'avaliações' : 'avaliação'}`}
               otherwise={"Ainda não possui avaliações"}
             />
           </p>
         </div>
       </Link>
 
-      <Show when={data.status.id == HumanEvaluationStatus.UNAVAILABLE}>
+      <Show when={data.status.id == EHumanEvaluationStatus.UNAVAILABLE}>
         <Suspense>
           <HumanEvaluationCardOptions evaluationId={data.id} />
         </Suspense>
